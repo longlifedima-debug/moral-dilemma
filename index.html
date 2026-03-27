@@ -874,10 +874,11 @@ function showFinalBlock(text){
   const fields={};let key=null,val=[];
   text.split('\n').forEach(l=>{const m=l.match(/^(НАЗВАНИЕ|ТЕКСТ|СЦЕНА \d+|ОПИСАНИЕ|ПОСТ):\s*(.*)/);if(m){if(key)fields[key]=val.join('\n').trim();key=m[1];val=[m[2]];}else if(key)val.push(l);});
   if(key)fields[key]=val.join('\n').trim();
-  const c=document.getElementById('finalFields');c.innerHTML='';
-  ['НАЗВАНИЕ','ТЕКСТ','СЦЕНА 1','СЦЕНА 2','СЦЕНА 3','СЦЕНА 4','СЦЕНА 5','ОПИСАНИЕ','ПОСТ'].forEach(k=>{
-    if(fields[k])c.innerHTML+=`<div class="final-field"><div class="final-field-label">${k}</div><div class="final-field-value" onclick="copyText(this)">${fields[k]}</div><div class="copy-hint">↑ нажми чтобы скопировать</div></div>`;
-  });
+  const order=['НАЗВАНИЕ','ТЕКСТ','СЦЕНА 1','СЦЕНА 2','СЦЕНА 3','СЦЕНА 4','СЦЕНА 5','ОПИСАНИЕ','ПОСТ'];
+  let combined='';
+  order.forEach(k=>{if(fields[k])combined+=k+':\n'+fields[k]+'\n\n';});
+  const c=document.getElementById('finalFields');
+  c.innerHTML=`<div class="final-field-value" onclick="copyText(this)" style="white-space:pre-wrap">${combined.trim()}</div><div class="copy-hint">↑ нажми чтобы скопировать</div>`;
   document.getElementById('finalBlock').classList.add('visible');
 }
 
