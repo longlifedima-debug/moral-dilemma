@@ -24,7 +24,6 @@ export default async function handler(req, res) {
         model: 'claude-sonnet-4-6',
         max_tokens: max_tokens ?? 1000,
         temperature: temperature ?? 0.7,
-        top_p: top_p ?? 0.9,
         system,
         messages
       })
