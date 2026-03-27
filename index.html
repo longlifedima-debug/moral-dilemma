@@ -689,7 +689,7 @@ Output format:
   stage3:{system:`Role: Visual content screenwriter.
 Task: Based on the input text create image prompts, YouTube description and comment post.
 Mode: Controlled creativity in presentation only.
-Prohibited: Adding facts, meanings or interpretations absent from the input text. Explaining the conflict — only maintain tension.
+Prohibited: Adding facts, meanings or interpretations absent from the input text. Explaining the conflict — only maintain tension. Using markdown formatting (no **, no #, no ---, no *italics*).
 
 Language:
 - Image prompts — English
@@ -839,7 +839,9 @@ async function continueAfterPause1(){
   else if(!state.selectedText){showError('Выбери вариант или введи свой текст');return;}
   hideError();document.getElementById('pause1').classList.remove('visible');document.getElementById('btnContinue1').disabled=true;
   setPill(3,'active');setLoading('Этап 3 — Сценарист создаёт сцены...');
-  try{state.stage3Result=await callClaude(PROMPTS.stage3,state.selectedText);setPill(3,'done');document.getElementById('result3Text').textContent=state.stage3Result;document.getElementById('result3').classList.add('visible');}
+  try{state.stage3Result=await callClaude(PROMPTS.stage3,state.selectedText);setPill(3,'done');document.getElementById('result3Text').textContent=state.stage3Result;document.getElementById('result3').classList.add('visible');
+  // Очищаем markdown из результата сценариста для передачи дальше
+  state.stage3Result=state.stage3Result.replace(/\*\*/g,'').replace(/^#+\s/gm,'').replace(/^---+$/gm,'').replace(/^\*([^*]+)\*$/gm,'$1').trim();}
   catch(e){hideLoading();showError('Ошибка Этапа 3: '+e.message);return;}
   setPill(4,'active');setLoading('Этап 4 — Генератор названий...');
   try{const r4=await callClaude(PROMPTS.stage4,state.selectedText);setPill(4,'done');hideLoading();showPause2(r4);}
