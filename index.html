@@ -770,7 +770,7 @@ Output format:
 };
 
 async function callClaude(p,msg){
-  const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:p.system,messages:[{role:'user',content:msg}],max_tokens:p.max_tokens,temperature:p.temperature,top_p:p.top_p})});
+  const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:p.system,messages:[{role:'user',content:msg}],max_tokens:p.max_tokens,temperature:p.temperature,})});
   const d=await r.json();
   if(!r.ok)throw new Error(d.error||'Ошибка API');
   if(d.error)throw new Error(JSON.stringify(d.error));
@@ -810,13 +810,24 @@ async function runPipeline(){
 
 function showPause1(text){
   let v1='',v2='';
-  text.split('\n').forEach(l=>{
-    if(/^ВАРИАНТ 1/i.test(l))v1=l.replace(/ВАРИАНТ 1\s*—\s*СЖАТИЕ:\s*/i,'').trim();
-    if(/^ВАРИАНТ 2/i.test(l))v2=l.replace(/ВАРИАНТ 2\s*—\s*ДАВЛЕНИЕ:\s*/i,'').trim();
-  });
+  const m1=text.match(/ВАРИАНТ\s*1[^:]*:\s*([\s\S]*?)(?=ВАРИАНТ\s*2|$)/i);
+  const m2=text.match(/ВАРИАНТ\s*2[^:]*:\s*([\s\S]*?)$/i);
+  if(m1) v1=m1[1].trim();
+  if(m2) v2=m2[1].trim();
+  if(!v1&&!v2){
+    const c1=text.match(/COMPRESSION:\s*([\s\S]*?)(?=PRESSURE:|$)/i);
+    const c2=text.match(/PRESSURE:\s*([\s\S]*?)$/i);
+    if(c1) v1=c1[1].trim();
+    if(c2) v2=c2[1].trim();
+  }
+  if(!v1&&!v2) v1=text.trim();
   const c=document.getElementById('pause1Variants');c.innerHTML='';
-  if(v1)c.innerHTML+=`<div class="variant-card" onclick="selectVariant(0,this,\`${v1.replace(/`/g,'\\`')}\`)"><div class="variant-label">Вариант 1 — Сжатие</div><div class="variant-text">${v1}</div></div>`;
-  if(v2)c.innerHTML+=`<div class="variant-card" onclick="selectVariant(1,this,\`${v2.replace(/`/g,'\\`')}\`)"><div class="variant-label">Вариант 2 — Давление</div><div class="variant-text">${v2}</div></div>`;
+  // DEBUG — показываем сырой ответ если варианты не найдены
+  if(!v1&&!v2){
+    c.innerHTML=`<div style="background:#ff475720;border:1px solid #ff4757;border-radius:8px;padding:12px;font-size:11px;color:#ff4757;font-family:monospace;white-space:pre-wrap">DEBUG — сырой ответ Этапа 2:\n${text}</div>`;
+  }
+  if(v1)c.innerHTML+=`<div class="variant-card" onclick="selectVariant(0,this,\`${v1.replace(/`/g,'\\`').replace(/\n/g,'\\n')}\`)"><div class="variant-label">Вариант 1 — Сжатие</div><div class="variant-text">${v1}</div></div>`;
+  if(v2)c.innerHTML+=`<div class="variant-card" onclick="selectVariant(1,this,\`${v2.replace(/`/g,'\\`').replace(/\n/g,'\\n')}\`)"><div class="variant-label">Вариант 2 — Давление</div><div class="variant-text">${v2}</div></div>`;
   document.getElementById('pause1').classList.add('visible');
 }
 
