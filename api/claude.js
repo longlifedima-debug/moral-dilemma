@@ -33,7 +33,8 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: data });
+      const errorMessage = data?.error?.message || data?.error || JSON.stringify(data);
+      return res.status(response.status).json({ error: errorMessage });
     }
 
     const text = data?.content?.[0]?.text || '';
