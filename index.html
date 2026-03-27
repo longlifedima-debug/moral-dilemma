@@ -766,7 +766,7 @@ Output format:
 СЦЕНА 4: [промт]
 СЦЕНА 5: [промт]
 ОПИСАНИЕ: [текст]
-ПОСТ: [текст]`,max_tokens:700,temperature:0.2,top_p:0.9}
+ПОСТ: [текст]`,max_tokens:1500,temperature:0.2,top_p:0.9}
 };
 
 async function callClaude(p,msg){
@@ -883,14 +883,9 @@ function showFinalBlock(text){
 }
 
 function copyAll(){
-  const fields=document.querySelectorAll(".final-field");
-  let text="";
-  fields.forEach(f=>{
-    const label=f.querySelector(".final-field-label").textContent;
-    const value=f.querySelector(".final-field-value").textContent;
-    text+=label+":\n"+value+"\n\n";
-  });
-  navigator.clipboard.writeText(text.trim()).then(()=>{
+  const el=document.querySelector('.final-field-value');
+  if(!el)return;
+  navigator.clipboard.writeText(el.textContent).then(()=>{
     const btn=document.querySelector("button[onclick='copyAll()']");
     const orig=btn.textContent;
     btn.textContent="✓ Скопировано!";
