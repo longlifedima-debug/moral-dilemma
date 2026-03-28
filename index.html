@@ -882,6 +882,7 @@ async function continueAfterPause1(){
   }
   catch(e){hideLoading();showError('Ошибка Этапа 3: '+e.message);return;}
 
+  await new Promise(resolve=>setTimeout(resolve,2000));
   setPill(4,'active');setLoading('Этап 4 — Генератор названий...');
   try{const r4=await callClaude(PROMPTS.stage4,state.selectedText);setPill(4,'done');hideLoading();showPause2(r4);}
   catch(e){hideLoading();showError('Ошибка Этапа 4: '+e.message);}
