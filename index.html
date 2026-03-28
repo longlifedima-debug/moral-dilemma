@@ -605,6 +605,7 @@
       <div class="result-block" id="result3">
         <div class="result-label"><span class="step-num">03</span> Сценарист</div>
         <div class="result-text" id="result3Text"></div>
+        <button class="btn-continue" id="btnContinue3" onclick="runStage4()" style="margin-top:16px">Перейти к названиям →</button>
       </div>
 
       <div class="pause-block" id="pause2">
@@ -881,8 +882,10 @@ async function continueAfterPause1(){
       .trim();
   }
   catch(e){hideLoading();showError('Ошибка Этапа 3: '+e.message);return;}
+}
 
-  await new Promise(resolve=>setTimeout(resolve,2000));
+async function runStage4(){
+  document.getElementById('btnContinue3').disabled=true;
   setPill(4,'active');setLoading('Этап 4 — Генератор названий...');
   try{const r4=await callClaude(PROMPTS.stage4,state.selectedText);setPill(4,'done');hideLoading();showPause2(r4);}
   catch(e){hideLoading();showError('Ошибка Этапа 4: '+e.message);}
@@ -945,7 +948,7 @@ function copyText(el){navigator.clipboard.writeText(el.textContent).then(()=>{el
 function resetPipeline(){
   Object.assign(state,{stage1Result:'',selectedText:'',stage3Result:'',titles:[],selectedTitle:'',selectedVariantIndex:-1});
   ['userInput','customText1','customTitle'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}});
-  ['btnRun','btnContinue1','btnContinue2'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=false;});
+  ['btnRun','btnContinue1','btnContinue2','btnContinue3'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=false;});
   ['pause1','pause2','result3','finalBlock','loading','errorMsg'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('visible');});
   for(let i=1;i<=5;i++)setPill(i,'');
 }
