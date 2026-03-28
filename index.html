@@ -604,6 +604,17 @@
           <button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
         </div>
       </div>
+
+      <div class="pause-block" id="pauseTitles">
+        <div class="pause-label">⏸ Выбери название</div>
+        <div class="titles-list" id="titlesList"></div>
+        <div class="pause-custom">
+          <div class="input-label">Или введи своё название</div>
+          <textarea id="customTitle" placeholder="Своё название..." style="min-height:60px"></textarea>
+        </div>
+        <button class="btn-continue" id="btnSelectTitle" onclick="copySelectedTitle()">⎘ Скопировать название</button>
+        <button class="btn-reset" style="margin-top:8px" onclick="resetPipeline()">↺ Новый текст</button>
+      </div>
     </div>
   </div>
 
@@ -723,7 +734,8 @@ const PROMPTS={
 Режим: Управляемая креативность только в форме подачи.
 
 Запрещено: Добавлять факты, смыслы и интерпретации отсутствующие во входящем тексте. Объяснять конфликт — только удерживать напряжение. Использовать markdown-форматирование (никаких **, #, ---, *курсив*).
-Язык: все блоки на русском языке.
+
+Язык: все блоки — на русском языке.
 
 Блок 1 — Пять сцен:
 Используй структуру входящего текста (HOOK → CONFLICT → ACTION → DEAD END → FINAL) и привяжи к сценам:
@@ -760,7 +772,35 @@ const PROMPTS={
 СЦЕНА 4: [промт]
 СЦЕНА 5: [промт]
 ОПИСАНИЕ: [текст]
-ПОСТ: [текст]`,max_tokens:2500,temperature:0.4,top_p:0.9}
+ПОСТ: [текст]`,max_tokens:2500,temperature:0.4,top_p:0.9},
+
+  stage4:{system:`Роль: Генератор триггерных названий.
+
+Задача: Создать 6 названий с максимальным CTR на основе входящего текста.
+
+Вход: Выбранный текст.
+
+Цель: Остановить скролл и создать дефицит информации без искажения смысла.
+
+Режим: Управляемая креативность только в формулировках — строго в рамках смыслов входящего текста.
+
+Запрещено: Выдумывать сущности отсутствующие в тексте. Нейтральный тон, вводные слова, эмодзи, пояснительный текст. Названия не должны противоречить библейским ценностям.
+
+Принципы:
+- Curiosity gap — фундамент каждого названия
+- 14-28 символов
+- Смысловой крючок в первых 3 словах
+- Простые живые слова — никаких канцеляризмов
+- 6 разных психологических приёмов
+- Пунктуация: только «?», «:», «—»
+
+Формат вывода:
+1. [Название]
+2. [Название]
+3. [Название]
+4. [Название]
+5. [Название]
+6. [Название]`,max_tokens:200,temperature:0.85,top_p:0.9}
 };
 
 async function checkStatus(){
@@ -862,12 +902,55 @@ async function continueToStage3(){
     const r3el=document.getElementById('result3');
     r3el.classList.add('visible');
     r3el.scrollIntoView({behavior:'smooth',block:'start'});
+    // Run stage4
+    setLoading('Этап 4 — Генератор названий...');
+    try{
+      const result4=await callClaude(PROMPTS.stage4,text);
+      hideLoading();
+      showTitles(result4);
+    }
+    catch(e){hideLoading();showError('Ошибка Этапа 4: '+e.message);}
   }
   catch(e){
     hideLoading();
     showError('Ошибка Этапа 3: '+e.message);
     document.getElementById('btnSelectVariant').disabled=false;
   }
+}
+
+function showTitles(text){
+  const c=document.getElementById('titlesList');
+  c.innerHTML='';
+  let selectedTitle='';
+  text.split('\n').filter(l=>l.trim()).forEach(l=>{
+    const m=l.match(/^\d+\.\s+(.+)/);
+    if(!m)return;
+    const t=m[1].trim();
+    const div=document.createElement('div');
+    div.className='title-item';
+    div.innerHTML='<span class="title-num">'+String(c.children.length+1).padStart(2,'0')+'</span>'+t;
+    div.addEventListener('click',function(){
+      document.querySelectorAll('.title-item').forEach(el=>el.classList.remove('selected'));
+      div.classList.add('selected');
+      document.getElementById('customTitle').value='';
+      selectedTitle=t;
+      window._selectedTitle=t;
+    });
+    c.appendChild(div);
+  });
+  document.getElementById('pauseTitles').classList.add('visible');
+  document.getElementById('pauseTitles').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copySelectedTitle(){
+  const custom=document.getElementById('customTitle').value.trim();
+  const text=custom||window._selectedTitle||'';
+  if(!text){showError('Выбери название или введи своё');return;}
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('btnSelectTitle');
+    btn.textContent='✓ Скопировано!';
+    setTimeout(()=>btn.textContent='⎘ Скопировать название',2000);
+  });
 }
 
 function copyResult3(){
@@ -886,6 +969,8 @@ function resetPipeline(){
   document.getElementById('btnRun').disabled=false;
   document.getElementById('pauseVariants').classList.remove('visible');
   document.getElementById('result3').classList.remove('visible');
+  document.getElementById('pauseTitles').classList.remove('visible');
+  window._selectedTitle='';
   document.getElementById('loading').classList.remove('visible');
   document.getElementById('errorMsg').classList.remove('visible');
   document.getElementById('customVariant').value='';
