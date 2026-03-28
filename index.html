@@ -870,7 +870,9 @@ async function continueAfterPause1(){
     setPill(3,'done');
     hideLoading();
     document.getElementById('result3Text').textContent=state.stage3Result;
-    document.getElementById('result3').classList.add('visible');
+    const r3el=document.getElementById('result3');
+    r3el.classList.add('visible');
+    setTimeout(()=>r3el.scrollIntoView({behavior:'smooth',block:'start'}),100);
     state.stage3Result=state.stage3Result
       .replace(/\*\*/g,'')
       .replace(/^#+\s/gm,'')
