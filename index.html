@@ -6,7 +6,7 @@
 <title>Моральная Дилемма — Авторский проект Юдкевича</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
-
+ 
   :root {
     --bg: #0d0d14;
     --bg2: #13131f;
@@ -840,6 +840,8 @@ async function continueAfterPause1(){
   hideError();document.getElementById('pause1').classList.remove('visible');document.getElementById('btnContinue1').disabled=true;
   setPill(3,'active');setLoading('Этап 3 — Сценарист создаёт сцены...');
   try{state.stage3Result=await callClaude(PROMPTS.stage3,state.selectedText);setPill(3,'done');
+  document.getElementById('result3Text').textContent = state.stage3Result;
+  document.getElementById('result3').classList.add('visible');   
   // Очищаем markdown из результата сценариста для передачи дальше
   state.stage3Result=state.stage3Result.replace(/\*\*/g,'').replace(/^#+\s/gm,'').replace(/^---+$/gm,'').replace(/^\*([^*]+)\*$/gm,'$1').trim();}
   catch(e){hideLoading();showError('Ошибка Этапа 3: '+e.message);return;}
