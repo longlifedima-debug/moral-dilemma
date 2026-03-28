@@ -746,7 +746,7 @@ async function runPipeline(){
   try{
     const result2=await callClaude(PROMPTS.stage2,stage1Result);
     hideLoading();
-    showVariants(result2);
+    showVariants(result2, stage1Result);
   }
   catch(e){
     hideLoading();
@@ -756,7 +756,7 @@ async function runPipeline(){
   }
 }
 
-function showVariants(text){
+function showVariants(text, stage1text){
   let v1='',v2='';
   const m1=text.match(/ВАРИАНТ\s*1[^:]*:\s*([\s\S]*?)(?=ВАРИАНТ\s*2|$)/i);
   const m2=text.match(/ВАРИАНТ\s*2[^:]*:\s*([\s\S]*?)$/i);
@@ -765,7 +765,11 @@ function showVariants(text){
   if(!v1&&!v2)v1=text.trim();
   const c=document.getElementById('variantsList');
   c.innerHTML='';
-  const variants=[{label:'Вариант 1 — Сжатие',text:v1},{label:'Вариант 2 — Давление',text:v2}];
+  const variants=[
+    {label:'Оригинал — Архитектор',text:stage1text},
+    {label:'Вариант 1 — Сжатие',text:v1},
+    {label:'Вариант 2 — Давление',text:v2}
+  ];
   variants.forEach((v,i)=>{
     if(!v.text)return;
     const div=document.createElement('div');
