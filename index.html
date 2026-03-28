@@ -741,7 +741,7 @@ Output format:
 3. [Название]
 4. [Название]
 5. [Название]
-6. [Название]`,max_tokens:200,temperature:0.9,top_p:0.9},
+6. [Название]`,max_tokens:200,temperature:0.85,top_p:0.9},
   stage5:{system:`Role: Precision editor.
 Task: Refine the text to logical clarity and assemble the final block.
 Prohibited: Adding new meanings or facts. Enhancing style.
@@ -770,8 +770,8 @@ Output format:
 };
 
 async function callClaude(p,msg){
-  const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:p.system,messages:[{role:'user',content:msg}],max_tokens:p.max_tokens,temperature:p.temperature,})});
-  const d=await r.json();
+  const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:p.system,messages:[{role:'user',content:msg}],max_tokens:p.max_tokens,temperature:p.temperature,top_p:p.top_p})});  
+  const d = await r.json();
   if(!r.ok)throw new Error(d.error||'Ошибка API');
   if(d.error)throw new Error(JSON.stringify(d.error));
   return d.text;
