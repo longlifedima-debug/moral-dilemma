@@ -755,7 +755,7 @@ Comment post:
 - Maintains tension, leaves the question open
 
 
-Edit rules — only the TEXT field. All other fields (SCENE, DESCRIPTION, POST) output without changes.
+Edit rules — only the TEXT field.
 - Change only 1–3 words or one short phrase (no more than 4–5 words)
 - Priority: precision over dramaturgy
 
@@ -890,8 +890,8 @@ async function continueAfterPause2(){
   else if(!state.selectedTitle){showError('Выбери название или введи своё');return;}
   hideError();document.getElementById('pause2').classList.remove('visible');document.getElementById('btnContinue2').disabled=true;
   setPill(5,'active');setLoading('Этап 5 — Финализатор собирает результат...');
-  const inp=`НАЗВАНИЕ: ${state.selectedTitle}\nТЕКСТ: ${state.selectedText}\nСЦЕНЫ И КОНТЕНТ: ${state.stage3Result}`;
-  try{const r5=await callClaude(PROMPTS.stage5,inp);setPill(5,'done');hideLoading();showFinalBlock(r5);}
+  const inp=`НАЗВАНИЕ: ${state.selectedTitle}\nТЕКСТ: ${state.selectedText}`;
+  try{const r5=await callClaude(PROMPTS.stage5,inp);setPill(5,'done');hideLoading();showFinalBlock(r5, state.stage3Result).;}
   catch(e){hideLoading();showError('Ошибка Этапа 5: '+e.message);}
 }
 
