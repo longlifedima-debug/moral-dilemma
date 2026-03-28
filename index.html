@@ -592,8 +592,17 @@
           <div class="input-label">Или введи свой вариант</div>
           <textarea id="customVariant" placeholder="Свой текст..."></textarea>
         </div>
-        <button class="btn-continue" id="btnSelectVariant" onclick="selectAndCopy()">⎘ Скопировать выбранный</button>
+        <button class="btn-continue" id="btnSelectVariant" onclick="continueToStage3()">Продолжить →</button>
         <button class="btn-reset" style="margin-top:8px" onclick="resetPipeline()">↺ Новый текст</button>
+      </div>
+
+      <div class="result-block" id="result3">
+        <div class="result-label"><span class="step-num">03</span> Сценарист</div>
+        <div class="result-text" id="result3Text"></div>
+        <div style="display:flex;gap:12px;margin-top:16px">
+          <button class="btn-continue" id="btnCopy3" onclick="copyResult3()">⎘ Скопировать</button>
+          <button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
+        </div>
       </div>
     </div>
   </div>
@@ -703,7 +712,54 @@ const PROMPTS={
 
 Формат вывода:
 ВАРИАНТ 1 — СЖАТИЕ: [текст]
-ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:500,temperature:0.5,top_p:0.9}
+ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:600,temperature:0.7,top_p:0.9},
+
+  stage3:{system:`Роль: Сценарист визуального контента.
+
+Задача: На основе входящего текста создать промты для изображений, описание для YouTube и пост для комментариев.
+
+Вход: Выбранный текст.
+
+Режим: Управляемая креативность только в форме подачи.
+
+Запрещено: Добавлять факты, смыслы и интерпретации отсутствующие во входящем тексте. Объяснять конфликт — только удерживать напряжение. Использовать markdown-форматирование (никаких **, #, ---, *курсив*).
+
+Блок 1 — Пять сцен:
+Используй структуру входящего текста (HOOK → CONFLICT → ACTION → DEAD END → FINAL) и привяжи к сценам:
+- Сцена 1 — HOOK
+- Сцены 2-3 — CONFLICT и ACTION
+- Сцена 4 — DEAD END
+- Сцена 5 — FINAL
+
+Для каждой сцены — один промт для визуала.
+
+Правила промта:
+- Эпоха соответствует теме текста
+- Стиль: полуреалистичный, кинематографичный
+- Сцена показывает конфликт или действие — не атмосферу
+- Без религиозных символов: крестов, звёзд Давида, полумесяцев
+
+Блок 2 — Описание для YouTube:
+- 2-3 предложения: контекст + интрига
+- Вопрос к зрителю
+- Хештеги: не более 5. Первый #shorts, последний #моральнаядилемма
+
+Блок 3 — Пост для комментариев:
+- Другой угол — не повторяй фразы из входящего текста
+- Раскрывает тему через переформулировку без новых фактов
+- 200-250 слов
+- Эмодзи для структуры и читаемости
+- Запрещено: моральные выводы, проповедь, объяснение конфликта
+- Удерживает напряжение, оставляет вопрос открытым
+
+Формат вывода:
+СЦЕНА 1: [промт]
+СЦЕНА 2: [промт]
+СЦЕНА 3: [промт]
+СЦЕНА 4: [промт]
+СЦЕНА 5: [промт]
+ОПИСАНИЕ: [текст]
+ПОСТ: [текст]`,max_tokens:2500,temperature:0.4,top_p:0.9}
 };
 
 async function checkStatus(){
@@ -789,14 +845,37 @@ function selectVariant(el,text){
   document.getElementById('customVariant').value='';
 }
 
-function selectAndCopy(){
+async function continueToStage3(){
   const custom=document.getElementById('customVariant').value.trim();
   const text=custom||selectedVariantText;
   if(!text){showError('Выбери вариант или введи свой');return;}
-  navigator.clipboard.writeText(text).then(()=>{
-    const btn=document.getElementById('btnSelectVariant');
+  hideError();
+  document.getElementById('btnSelectVariant').disabled=true;
+  document.getElementById('pauseVariants').classList.remove('visible');
+  setLoading('Этап 3 — Сценарист создаёт сцены...');
+  try{
+    const result3=await callClaude(PROMPTS.stage3,text);
+    hideLoading();
+    const cleaned=result3.replace(/\*\*/g,'').replace(/^#+\s/gm,'').replace(/^---+$/gm,'').trim();
+    document.getElementById('result3Text').textContent=cleaned;
+    const r3el=document.getElementById('result3');
+    r3el.classList.add('visible');
+    r3el.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  catch(e){
+    hideLoading();
+    showError('Ошибка Этапа 3: '+e.message);
+    document.getElementById('btnSelectVariant').disabled=false;
+  }
+}
+
+function copyResult3(){
+  const el=document.getElementById('result3Text');
+  if(!el)return;
+  navigator.clipboard.writeText(el.textContent).then(()=>{
+    const btn=document.getElementById('btnCopy3');
     btn.textContent='✓ Скопировано!';
-    setTimeout(()=>btn.textContent='⎘ Скопировать выбранный',2000);
+    setTimeout(()=>btn.textContent='⎘ Скопировать',2000);
   });
 }
 
@@ -805,6 +884,7 @@ function resetPipeline(){
   document.getElementById('userInput').disabled=false;
   document.getElementById('btnRun').disabled=false;
   document.getElementById('pauseVariants').classList.remove('visible');
+  document.getElementById('result3').classList.remove('visible');
   document.getElementById('loading').classList.remove('visible');
   document.getElementById('errorMsg').classList.remove('visible');
   document.getElementById('customVariant').value='';
