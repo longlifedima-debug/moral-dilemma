@@ -870,16 +870,17 @@ async function continueAfterPause1(){
     state.stage3Result=await callClaude(PROMPTS.stage3,state.selectedText);
     setPill(3,'done');
     hideLoading();
-    document.getElementById('result3Text').textContent=state.stage3Result;
-    const r3el=document.getElementById('result3');
-    r3el.classList.add('visible');
-    setTimeout(()=>r3el.scrollIntoView({behavior:'smooth',block:'start'}),100);
-    state.stage3Result=state.stage3Result
+    const cleaned=state.stage3Result
       .replace(/\*\*/g,'')
       .replace(/^#+\s/gm,'')
       .replace(/^---+$/gm,'')
       .replace(/^\*([^*]+)\*$/gm,'$1')
       .trim();
+    state.stage3Result=cleaned;
+    document.getElementById('result3Text').textContent=cleaned;
+    const r3el=document.getElementById('result3');
+    r3el.classList.add('visible');
+    r3el.scrollIntoView({behavior:'smooth',block:'start'});
   }
   catch(e){hideLoading();showError('Ошибка Этапа 3: '+e.message);return;}
 }
