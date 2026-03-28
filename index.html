@@ -932,7 +932,7 @@ function showFinalBlock(text,scenes){
   c.innerHTML=`<div class="final-field-value" onclick="copyText(this)" style="white-space:pre-wrap">${combined.trim()}</div><div class="copy-hint">↑ нажми чтобы скопировать</div>`;
   document.getElementById('finalBlock').classList.add('visible');
 }
-
+ 
 function copyAll(){
   const el=document.querySelector('.final-field-value');
   if(!el)return;
