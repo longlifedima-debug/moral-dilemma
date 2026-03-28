@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   const { messages, system, max_tokens, temperature, top_p } = req.body;
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 30000);
+  const timeout = setTimeout(() => controller.abort(), 60000);
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
