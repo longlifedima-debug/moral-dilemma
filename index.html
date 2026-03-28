@@ -894,17 +894,27 @@ async function continueAfterPause2(){
   try{const r5=await callClaude(PROMPTS.stage5,inp);setPill(5,'done');hideLoading();showFinalBlock(r5, state.stage3Result).;}
   catch(e){hideLoading();showError('Ошибка Этапа 5: '+e.message);}
 }
-
-function showFinalBlock(text){
+function showFinalBlock(text, scenes){
   const fields={};let key=null,val=[];
-  text.split('\n').forEach(l=>{const m=l.match(/^(НАЗВАНИЕ|ТЕКСТ|СЦЕНА \d+|ОПИСАНИЕ|ПОСТ):\s*(.*)/);if(m){if(key)fields[key]=val.join('\n').trim();key=m[1];val=[m[2]];}else if(key)val.push(l);});
+  text.split('\n').forEach(l=>{const m=l.match(/^(НАЗВАНИЕ|ТЕКСТ|ОПИСАНИЕ|ПОСТ):\s*(.*)/);if(m){if(key)fields[key]=val.join('\n').trim();key=m[1];val=[m[2]];}else if(key)val.push(l);});
   if(key)fields[key]=val.join('\n').trim();
+  
+  // Парсим сцены из этапа 3
+  const sceneFields={};let skey=null,sval=[];
+  if(scenes){scenes.split('\n').forEach(l=>{const m=l.match(/^(СЦЕНА \d+):\s*(.*)/);if(m){if(skey)sceneFields[skey]=sval.join('\n').trim();skey=m[1];sval=[m[2]];}else if(skey)sval.push(l);});if(skey)sceneFields[skey]=sval.join('\n').trim();}
+  
   const order=['НАЗВАНИЕ','ТЕКСТ','СЦЕНА 1','СЦЕНА 2','СЦЕНА 3','СЦЕНА 4','СЦЕНА 5','ОПИСАНИЕ','ПОСТ'];
   let combined='';
-  order.forEach(k=>{if(fields[k])combined+=k+':\n'+fields[k]+'\n\n';});
+  order.forEach(k=>{
+    const val=fields[k]||sceneFields[k];
+    if(val)combined+=k+':\n'+val+'\n\n';
+  });
   const c=document.getElementById('finalFields');
   c.innerHTML=`<div class="final-field-value" onclick="copyText(this)" style="white-space:pre-wrap">${combined.trim()}</div><div class="copy-hint">↑ нажми чтобы скопировать</div>`;
   document.getElementById('finalBlock').classList.add('visible');
+}
+
+  
 }
 
 function copyAll(){
