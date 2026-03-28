@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -574,55 +574,24 @@
     <div class="pipeline-page">
       <div class="page-back" onclick="showPage('home')">← Назад</div>
       <div class="pipeline-title">Когнитивный разрыв</div>
-      <div class="pipeline-sub">5-этапный конвейер для YouTube Shorts на библейские темы</div>
-      <div class="pipeline-steps">
-        <span class="step-pill" id="pill-1">1. Архитектор</span><span class="step-arrow">→</span>
-        <span class="step-pill" id="pill-2">2. Усилитель</span><span class="step-arrow">→</span>
-        <span class="step-pill" id="pill-3">3. Сценарист</span><span class="step-arrow">→</span>
-        <span class="step-pill" id="pill-4">4. Названия</span><span class="step-arrow">→</span>
-        <span class="step-pill" id="pill-5">5. Финализатор</span>
-      </div>
+      <div class="pipeline-sub">Архитектор когнитивного разрыва — 5 предложений из твоего текста</div>
 
       <div class="input-block">
         <div class="input-label">Твой текст или идея</div>
         <textarea id="userInput" placeholder="Введи библейский текст или идею для шорта..."></textarea>
-        <button class="btn-run" id="btnRun" onclick="runPipeline()">▶ Запустить конвейер</button>
+        <button class="btn-run" id="btnRun" onclick="runPipeline()">▶ Запустить</button>
       </div>
 
       <div class="error-msg" id="errorMsg"></div>
       <div class="loading" id="loading"><div class="spinner"></div><span id="loadingText">Обработка...</span></div>
 
-      <div class="pause-block" id="pause1">
-        <div class="pause-label">⏸ Пауза — выбери вариант</div>
-        <div class="pause-variants" id="pause1Variants"></div>
-        <div class="pause-custom">
-          <div class="input-label">Или введи свой вариант</div>
-          <textarea id="customText1" placeholder="Свой текст..."></textarea>
+      <div class="result-block" id="resultBlock">
+        <div class="result-label"><span class="step-num">01</span> Архитектор</div>
+        <div class="result-text" id="resultText"></div>
+        <div style="display:flex;gap:12px;margin-top:16px">
+          <button class="btn-continue" id="btnCopy" onclick="copyResult()">⎘ Скопировать</button>
+          <button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
         </div>
-        <button class="btn-continue" id="btnContinue1" onclick="continueAfterPause1()">Продолжить →</button>
-      </div>
-
-      <div class="result-block" id="result3">
-        <div class="result-label"><span class="step-num">03</span> Сценарист</div>
-        <div class="result-text" id="result3Text"></div>
-        <button class="btn-continue" id="btnContinue3" onclick="runStage4()" style="margin-top:16px">Перейти к названиям →</button>
-      </div>
-
-      <div class="pause-block" id="pause2">
-        <div class="pause-label">⏸ Пауза — выбери название</div>
-        <div class="titles-list" id="titlesList"></div>
-        <div class="pause-custom">
-          <div class="input-label">Или введи своё название</div>
-          <textarea id="customTitle" placeholder="Своё название..." style="min-height:60px"></textarea>
-        </div>
-        <button class="btn-continue" id="btnContinue2" onclick="continueAfterPause2()">Финализировать →</button>
-      </div>
-
-      <div class="final-block" id="finalBlock">
-        <div class="final-label">✓ Готово к публикации</div>
-        <div id="finalFields"></div>
-        <button class="btn-run" style="margin-top:16px;margin-bottom:8px" onclick="copyAll()">⎘ Скопировать всё</button>
-        <button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
       </div>
     </div>
   </div>
@@ -630,7 +599,13 @@
 </main>
 
 <script>
-const state={stage1Result:'',selectedText:'',stage3Result:'',titles:[],selectedTitle:'',selectedVariantIndex:-1};
+async function callClaude(p,msg){
+  const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:p.system,messages:[{role:'user',content:msg}],max_tokens:p.max_tokens,temperature:p.temperature,top_p:p.top_p})});
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||'Ошибка API');
+  if(d.error)throw new Error(JSON.stringify(d.error));
+  return d.text;
+}
 
 const PROMPTS={
   stage1:{system:`Роль: Архитектор когнитивного разрыва.
@@ -684,140 +659,8 @@ const PROMPTS={
 
 Общий принцип:
 Сохраняй противоречие и связность.
-Финал может при желании использовать жёсткую формулировку, но без обязательных шаблонов.`,max_tokens:300,temperature:0.3,top_p:0.9},
-
-  stage2:{system:`Роль: Усилитель когнитивного разрыва.
-
-Задача: Пересобрать входящий текст в два варианта с максимальным когнитивным разрывом через живой язык.
-
-Вход: 5 предложений из Этапа 1.
-
-Выход: Два варианта текста.
-
-Режим: Управляемая креативность только в синтаксисе — короткие фразы, паузы, глаголы действия.
-
-Запрещено: Добавлять новые факты, смыслы, интерпретации. Рекламные клише: "уникальный", "невероятный", "узнай как". Новые эмоции и оценки.
-
-Правила живого языка:
-Говори как человек который только что это понял. Короткие предложения. Паузы. Незаконченные мысли... Никаких "таким образом", "следует отметить", "примечательно". Канцеляризмы — заменяй на глаголы действия. Эмоция только через синтаксис. Логика HOOK → CONFLICT → DEAD END → FINAL сохраняется полностью.
-
-ВАРИАНТ 1 — СЖАТИЕ: очищенный текст до ядра противоречия. Только удар. Лимит: 30–45 слов.
-
-ВАРИАНТ 2 — ДАВЛЕНИЕ: жёстче за счёт синтаксиса и контраста. Усиленный хук и финальный удар. Без новых фактов. Лимит: 40–45 слов, отклонение ±5 слов допустимо.
-
-Правило уникальности: СЖАТИЕ и ДАВЛЕНИЕ не могут использовать одинаковый хук, финальный удар и синтаксическую модель. Каждый вариант строит хук и финал независимо.
-
-Формат вывода:
-ВАРИАНТ 1 — СЖАТИЕ: [текст]
-ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:300,temperature:0.85,top_p:0.9},
-
-  stage3:{system:`Роль: Сценарист визуального контента.
-
-Задача: На основе входящего текста создать промты для изображений, описание для YouTube и пост для комментариев.
-
-Вход: Выбранный текст.
-
-Режим: Управляемая креативность только в форме подачи.
-
-Запрещено: Добавлять факты, смыслы и интерпретации отсутствующие во входящем тексте. Объяснять конфликт — только удерживать напряжение. Использовать markdown-форматирование (никаких **, #, ---, *курсив*).
-
-Блок 1 — Пять сцен:
-Используй структуру входящего текста (HOOK → CONFLICT → DEAD END → FINAL) и привяжи к сценам:
-- Сцена 1 — HOOK
-- Сцены 2-3 — CONFLICT
-- Сцена 4 — DEAD END
-- Сцена 5 — FINAL
-Для каждой сцены — один промт для визуала.
-Правила промта:
-- Эпоха соответствует теме текста
-- Стиль: полуреалистичный, кинематографичный
-- Сцена показывает конфликт или действие — не атмосферу
-- Без религиозных символов: крестов, звёзд Давида, полумесяцев
-
-Блок 2 — Описание для YouTube:
-- 2-3 предложения: контекст + интрига
-- Вопрос к зрителю
-- Хештеги: не более 5. Первый #shorts, последний #моральнаядилемма
-
-Блок 3 — Пост для комментариев:
-- Другой угол — не повторяй фразы из входящего текста
-- Раскрывает тему через переформулировку без новых фактов
-- 200-250 слов
-- Эмодзи для структуры и читаемости
-- Запрещено: моральные выводы, проповедь, объяснение конфликта
-- Удерживает напряжение, оставляет вопрос открытым
-
-Формат вывода:
-СЦЕНА 1: [промт]
-СЦЕНА 2: [промт]
-СЦЕНА 3: [промт]
-СЦЕНА 4: [промт]
-СЦЕНА 5: [промт]
-ОПИСАНИЕ: [текст]
-ПОСТ: [текст]`,max_tokens:2500,temperature:0.4,top_p:0.9},
-
-  stage4:{system:`Роль: Генератор триггерных названий.
-
-Задача: Создать 6 названий с максимальным CTR на основе входящего текста.
-
-Вход: Выбранный текст.
-
-Цель: Остановить скролл и создать дефицит информации без искажения смысла.
-
-Режим: Управляемая креативность только в формулировках — строго в рамках смыслов входящего текста.
-
-Запрещено: Выдумывать сущности отсутствующие в тексте. Нейтральный тон, вводные слова, эмодзи, пояснительный текст. Названия не должны противоречить библейским ценностям.
-
-Принципы:
-- Curiosity gap — фундамент каждого названия
-- 14-28 символов
-- Смысловой крючок в первых 3 словах
-- Простые живые слова — никаких канцеляризмов
-- 6 разных психологических приёмов
-- Пунктуация: только «?», «:», «—»
-
-Формат вывода:
-1. [Название]
-2. [Название]
-3. [Название]
-4. [Название]
-5. [Название]
-6. [Название]`,max_tokens:200,temperature:0.85,top_p:0.9},
-
-  stage5:{system:`Роль: Редактор точности.
-
-Задача: Довести текст до логической чистоты и собрать финальный блок.
-
-Вход: Финальный текст + название + описание + пост.
-
-Запрещено: Добавлять новые смыслы или факты. Усиливать стиль.
-
-Правила правки — только поле ТЕКСТ. Остальные поля (ОПИСАНИЕ, ПОСТ) выводить без изменений.
-- Менять только 1–3 слова или одну короткую фразу (не более 4–5 слов)
-- Приоритет: точность выше драматургии
-
-Для правки:
-- ЛОГИКА — нет перевёрнутых смыслов
-- ЯСНОСТЬ — нет абстракций без привязки, нет слабых слов («немного», «как бы», «в целом», «иногда», «некий»)
-
-Для наблюдения — не основание для правки:
-- УДАР — точка напряжения есть и не разряжается
-- ОТКРЫТОСТЬ — петля не закрыта
-
-Формат вывода:
-НАЗВАНИЕ: [выбранное название]
-ТЕКСТ: [финальный текст]
-ОПИСАНИЕ: [текст]
-ПОСТ: [текст]`,max_tokens:3000,temperature:0.2,top_p:0.9}
+Финал может при желании использовать жёсткую формулировку, но без обязательных шаблонов.`,max_tokens:400,temperature:0.3,top_p:0.9}
 };
-
-async function callClaude(p,msg){
-  const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:p.system,messages:[{role:'user',content:msg}],max_tokens:p.max_tokens,temperature:p.temperature,top_p:p.top_p})});
-  const d=await r.json();
-  if(!r.ok)throw new Error(d.error||'Ошибка API');
-  if(d.error)throw new Error(JSON.stringify(d.error));
-  return d.text;
-}
 
 async function checkStatus(){
   try{
@@ -834,7 +677,6 @@ function setLoading(t){document.getElementById('loading').classList.add('visible
 function hideLoading(){document.getElementById('loading').classList.remove('visible');}
 function showError(m){const el=document.getElementById('errorMsg');el.textContent=m;el.classList.add('visible');}
 function hideError(){document.getElementById('errorMsg').classList.remove('visible');}
-function setPill(n,s){document.getElementById('pill-'+n).className='step-pill '+s;}
 
 async function runPipeline(){
   const input=document.getElementById('userInput').value.trim();
@@ -842,134 +684,42 @@ async function runPipeline(){
   hideError();
   document.getElementById('btnRun').disabled=true;
   document.getElementById('userInput').disabled=true;
-  setPill(1,'active');setLoading('Этап 1 — Архитектор строит структуру...');
-  try{state.stage1Result=await callClaude(PROMPTS.stage1,input);setPill(1,'done');}
-  catch(e){hideLoading();showError('Ошибка Этапа 1: '+e.message);document.getElementById('btnRun').disabled=false;document.getElementById('userInput').disabled=false;return;}
-  setPill(2,'active');setLoading('Этап 2 — Усилитель создаёт варианты...');
-  try{const r2=await callClaude(PROMPTS.stage2,state.stage1Result);setPill(2,'done');hideLoading();showPause1(r2);}
-  catch(e){hideLoading();showError('Ошибка Этапа 2: '+e.message);document.getElementById('btnRun').disabled=false;document.getElementById('userInput').disabled=false;}
-}
-
-function showPause1(text){
-  let v1='',v2='';
-  const m1=text.match(/ВАРИАНТ\s*1[^:]*:\s*([\s\S]*?)(?=ВАРИАНТ\s*2|$)/i);
-  const m2=text.match(/ВАРИАНТ\s*2[^:]*:\s*([\s\S]*?)$/i);
-  if(m1)v1=m1[1].trim();
-  if(m2)v2=m2[1].trim();
-  if(!v1&&!v2){
-    const c1=text.match(/COMPRESSION:\s*([\s\S]*?)(?=PRESSURE:|$)/i);
-    const c2=text.match(/PRESSURE:\s*([\s\S]*?)$/i);
-    if(c1)v1=c1[1].trim();
-    if(c2)v2=c2[1].trim();
-  }
-  if(!v1&&!v2)v1=text.trim();
-  const c=document.getElementById('pause1Variants');c.innerHTML='';
-  if(!v1&&!v2){
-    c.innerHTML=`<div style="background:#ff475720;border:1px solid #ff4757;border-radius:8px;padding:12px;font-size:11px;color:#ff4757;font-family:monospace;white-space:pre-wrap">DEBUG — сырой ответ Этапа 2:\n${text}</div>`;
-  }
-  if(v1)c.innerHTML+=`<div class="variant-card" onclick="selectVariant(0,this,\`${v1.replace(/`/g,'\\`').replace(/\n/g,'\\n')}\`)"><div class="variant-label">Вариант 1 — Сжатие</div><div class="variant-text">${v1}</div></div>`;
-  if(v2)c.innerHTML+=`<div class="variant-card" onclick="selectVariant(1,this,\`${v2.replace(/`/g,'\\`').replace(/\n/g,'\\n')}\`)"><div class="variant-label">Вариант 2 — Давление</div><div class="variant-text">${v2}</div></div>`;
-  document.getElementById('pause1').classList.add('visible');
-}
-
-function selectVariant(idx,el,text){state.selectedVariantIndex=idx;state.selectedText=text;document.querySelectorAll('.variant-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');document.getElementById('customText1').value='';}
-
-async function continueAfterPause1(){
-  const custom=document.getElementById('customText1').value.trim();
-  if(custom)state.selectedText=custom;
-  else if(!state.selectedText){showError('Выбери вариант или введи свой текст');return;}
-  hideError();document.getElementById('pause1').classList.remove('visible');document.getElementById('btnContinue1').disabled=true;
-  setPill(3,'active');setLoading('Этап 3 — Сценарист создаёт сцены...');
+  setLoading('Архитектор строит структуру...');
   try{
-    state.stage3Result=await callClaude(PROMPTS.stage3,state.selectedText);
-    setPill(3,'done');
+    const result=await callClaude(PROMPTS.stage1,input);
     hideLoading();
-    const cleaned=state.stage3Result
-      .replace(/\*\*/g,'')
-      .replace(/^#+\s/gm,'')
-      .replace(/^---+$/gm,'')
-      .replace(/^\*([^*]+)\*$/gm,'$1')
-      .trim();
-    state.stage3Result=cleaned;
-    document.getElementById('result3Text').textContent=cleaned;
-    const r3el=document.getElementById('result3');
-    r3el.classList.add('visible');
-    r3el.scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('resultText').textContent=result;
+    document.getElementById('resultBlock').classList.add('visible');
+    document.getElementById('resultBlock').scrollIntoView({behavior:'smooth',block:'start'});
   }
-  catch(e){hideLoading();showError('Ошибка Этапа 3: '+e.message);return;}
+  catch(e){
+    hideLoading();
+    showError('Ошибка: '+e.message);
+    document.getElementById('btnRun').disabled=false;
+    document.getElementById('userInput').disabled=false;
+  }
 }
 
-async function runStage4(){
-  document.getElementById('btnContinue3').disabled=true;
-  setPill(4,'active');setLoading('Этап 4 — Генератор названий...');
-  try{const r4=await callClaude(PROMPTS.stage4,state.selectedText);setPill(4,'done');hideLoading();showPause2(r4);}
-  catch(e){hideLoading();showError('Ошибка Этапа 4: '+e.message);}
-}
-
-function showPause2(text){
-  state.titles=[];const c=document.getElementById('titlesList');c.innerHTML='';
-  text.split('\n').filter(l=>l.trim()).forEach(l=>{
-    const m=l.match(/^\d+\.\s+(.+)/);
-    if(m){const t=m[1].trim(),i=state.titles.length;state.titles.push(t);c.innerHTML+=`<div class="title-item" onclick="selectTitle(${i},this,\`${t.replace(/`/g,'\\`')}\`)"><span class="title-num">${String(i+1).padStart(2,'0')}</span>${t}</div>`;}
-  });
-  document.getElementById('pause2').classList.add('visible');
-}
-
-function selectTitle(idx,el,title){state.selectedTitle=title;document.querySelectorAll('.title-item').forEach(t=>t.classList.remove('selected'));el.classList.add('selected');document.getElementById('customTitle').value='';}
-
-async function continueAfterPause2(){
-  const custom=document.getElementById('customTitle').value.trim();
-  if(custom)state.selectedTitle=custom;
-  else if(!state.selectedTitle){showError('Выбери название или введи своё');return;}
-  hideError();document.getElementById('pause2').classList.remove('visible');document.getElementById('btnContinue2').disabled=true;
-  setPill(5,'active');setLoading('Этап 5 — Финализатор собирает результат...');
-  const inp=`НАЗВАНИЕ: ${state.selectedTitle}\nТЕКСТ: ${state.selectedText}`;
-  try{const r5=await callClaude(PROMPTS.stage5,inp);setPill(5,'done');hideLoading();showFinalBlock(r5,state.stage3Result);}
-  catch(e){hideLoading();showError('Ошибка Этапа 5: '+e.message);}
-}
-
-function showFinalBlock(text,scenes){
-  const fields={};let key=null,val=[];
-  text.split('\n').forEach(l=>{const m=l.match(/^(НАЗВАНИЕ|ТЕКСТ|ОПИСАНИЕ|ПОСТ):\s*(.*)/);if(m){if(key)fields[key]=val.join('\n').trim();key=m[1];val=[m[2]];}else if(key)val.push(l);});
-  if(key)fields[key]=val.join('\n').trim();
-
-  const sceneFields={};let skey=null,sval=[];
-  if(scenes){scenes.split('\n').forEach(l=>{const m=l.match(/^(СЦЕНА \d+):\s*(.*)/);if(m){if(skey)sceneFields[skey]=sval.join('\n').trim();skey=m[1];sval=[m[2]];}else if(skey)sval.push(l);});if(skey)sceneFields[skey]=sval.join('\n').trim();}
-
-  const order=['НАЗВАНИЕ','ТЕКСТ','СЦЕНА 1','СЦЕНА 2','СЦЕНА 3','СЦЕНА 4','СЦЕНА 5','ОПИСАНИЕ','ПОСТ'];
-  let combined='';
-  order.forEach(k=>{
-    const v=fields[k]||sceneFields[k];
-    if(v)combined+=k+':\n'+v+'\n\n';
-  });
-  const c=document.getElementById('finalFields');
-  c.innerHTML=`<div class="final-field-value" onclick="copyText(this)" style="white-space:pre-wrap">${combined.trim()}</div><div class="copy-hint">↑ нажми чтобы скопировать</div>`;
-  document.getElementById('finalBlock').classList.add('visible');
-}
-
-function copyAll(){
-  const el=document.querySelector('.final-field-value');
+function copyResult(){
+  const el=document.getElementById('resultText');
   if(!el)return;
   navigator.clipboard.writeText(el.textContent).then(()=>{
-    const btn=document.querySelector("button[onclick='copyAll()']");
-    const orig=btn.textContent;
+    const btn=document.getElementById('btnCopy');
     btn.textContent='✓ Скопировано!';
-    setTimeout(()=>btn.textContent=orig,2000);
+    setTimeout(()=>btn.textContent='⎘ Скопировать',2000);
   });
 }
 
-function copyText(el){navigator.clipboard.writeText(el.textContent).then(()=>{el.style.borderColor='var(--green)';setTimeout(()=>el.style.borderColor='',1000);});}
-
 function resetPipeline(){
-  Object.assign(state,{stage1Result:'',selectedText:'',stage3Result:'',titles:[],selectedTitle:'',selectedVariantIndex:-1});
-  ['userInput','customText1','customTitle'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}});
-  ['btnRun','btnContinue1','btnContinue2','btnContinue3'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=false;});
-  ['pause1','pause2','result3','finalBlock','loading','errorMsg'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('visible');});
-  for(let i=1;i<=5;i++)setPill(i,'');
+  document.getElementById('userInput').value='';
+  document.getElementById('userInput').disabled=false;
+  document.getElementById('btnRun').disabled=false;
+  document.getElementById('resultBlock').classList.remove('visible');
+  document.getElementById('loading').classList.remove('visible');
+  document.getElementById('errorMsg').classList.remove('visible');
 }
 
 checkStatus();
-window.runStage4 = runStage4;
 </script>
 </body>
 </html>
