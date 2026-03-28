@@ -707,18 +707,12 @@ Prompt rules:
 - Style: semi-realistic, cinematic
 - Scene shows conflict or action — not atmosphere
 - No religious symbols: crosses, Stars of David, crescents
-
-Block 2 — YouTube description:
-- 2-3 sentences: context + intrigue
-- Question to the viewer
-- Hashtags: maximum 5. First #shorts, last #моральнаядилемма
-
-Block 3 — Comment post:
-- Different angle — do not repeat phrases from the input text
-- Deepens the theme through reformulation without new facts
-- 200-250 words
-- Emojis for structure and readability
-- Prohibited: moral conclusions, preaching, explaining the conflict
+Output format:
+СЦЕНА 1: [промт]
+СЦЕНА 2: [промт]
+СЦЕНА 3: [промт]
+СЦЕНА 4: [промт]
+СЦЕНА 5: [промт]
 - Maintains tension, leaves the question open`,max_tokens:2500,temperature:0.4,top_p:0.9},
   stage4:{system:`Role: Trigger title generator.
 Task: Create 6 titles with maximum CTR based on the input text.
@@ -745,6 +739,22 @@ Output format:
   stage5:{system:`Role: Precision editor.
 Task: Refine the text to logical clarity and assemble the final block.
 Prohibited: Adding new meanings or facts. Enhancing style.
+Generate for the YouTube description and comment post based on the input text:
+
+YouTube description:
+- 2-3 sentences: context + intrigue
+- Question to the viewer
+- Hashtags: maximum 5. First #shorts, last #моральнаядилемма
+
+Comment post:
+- Different angle — do not repeat phrases from the input text
+- Deepens the theme through reformulation without new facts
+- 200-250 words
+- Emojis for structure and readability
+- Prohibited: moral conclusions, preaching, explaining the conflict
+- Maintains tension, leaves the question open
+
+
 Edit rules — only the TEXT field. All other fields (SCENE, DESCRIPTION, POST) output without changes.
 - Change only 1–3 words or one short phrase (no more than 4–5 words)
 - Priority: precision over dramaturgy
@@ -760,11 +770,6 @@ For observation — not grounds for editing:
 Output format:
 НАЗВАНИЕ: [выбранное название]
 ТЕКСТ: [финальный текст]
-СЦЕНА 1: [промт]
-СЦЕНА 2: [промт]
-СЦЕНА 3: [промт]
-СЦЕНА 4: [промт]
-СЦЕНА 5: [промт]
 ОПИСАНИЕ: [текст]
 ПОСТ: [текст]`,max_tokens:3000,temperature:0.2,top_p:0.9}
 };
