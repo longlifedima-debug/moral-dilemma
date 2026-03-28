@@ -248,9 +248,7 @@
   .analyzer-output { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:20px 24px; display:flex; flex-direction:column; align-items:center; gap:10px; font-size:11px; font-weight:700; color:var(--text-dim); letter-spacing:.5px; text-transform:uppercase; min-width:100px; }
   .analyzer-output-icon { font-size:28px; }
 
-  /* ========================
-     PIPELINE PAGE
-  ======================== */
+  /* PIPELINE PAGE */
   .pipeline-page { padding:32px; max-width:900px; margin:0 auto; }
   .page-back { display:flex; align-items:center; gap:8px; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); cursor:pointer; margin-bottom:32px; transition:color .2s; width:fit-content; }
   .page-back:hover { color:var(--text); }
@@ -363,7 +361,6 @@
           </div>
           <div class="cards-grid">
 
-            <!-- Когнитивный разрыв — ACTIVE -->
             <div class="card theme-yellow" onclick="openPipeline()">
               <div class="card-top-line"></div>
               <div class="card-icon-wrap">⚡</div>
@@ -378,7 +375,6 @@
               </div>
             </div>
 
-            <!-- Удар в лоб -->
             <div class="card theme-red disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -388,7 +384,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Тихая бомба -->
             <div class="card theme-orange disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -398,7 +393,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Скрытый механизм -->
             <div class="card theme-blue disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -408,7 +402,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Перевёрнутая картина -->
             <div class="card theme-purple disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -418,7 +411,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Невыносимый вопрос -->
             <div class="card theme-teal disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -428,7 +420,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Два факта -->
             <div class="card theme-pink disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -438,7 +429,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Новая сборка -->
             <div class="card theme-blue disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -448,7 +438,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Личный приговор -->
             <div class="card theme-red disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -458,7 +447,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Холодный протокол -->
             <div class="card theme-teal disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -468,7 +456,6 @@
               <div><span class="btn-dev">В разработке</span></div>
             </div>
 
-            <!-- Полный разрыв -->
             <div class="card theme-orange disabled">
               <div class="card-top-line"></div>
               <div class="card-badge">Скоро</div>
@@ -633,7 +620,8 @@
       <div class="final-block" id="finalBlock">
         <div class="final-label">✓ Готово к публикации</div>
         <div id="finalFields"></div>
-        <button class="btn-run" style="margin-top:16px;margin-bottom:8px" onclick="copyAll()">⎘ Скопировать всё</button><button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
+        <button class="btn-run" style="margin-top:16px;margin-bottom:8px" onclick="copyAll()">⎘ Скопировать всё</button>
+        <button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
       </div>
     </div>
   </div>
@@ -644,130 +632,164 @@
 const state={stage1Result:'',selectedText:'',stage3Result:'',titles:[],selectedTitle:'',selectedVariantIndex:-1};
 
 const PROMPTS={
-  stage1:{system:`Role: Architect of cognitive dissonance.
-Task: Transform the input text into a 5-sentence monologue with maximum cognitive dissonance.
-Input: Author's text or idea on a biblical theme.
-Output: Exactly 5 sentences, 40–45 words, no headers, numbering or explanations.
-Mode: Strictly structural. Deviations from structure are prohibited.
-Prohibited: Adding facts, evaluations, interpretations, external data. Using connectives "because", "therefore", "since".
+  stage1:{system:`Роль: Архитектор когнитивного разрыва.
 
-Synthesis Algorithm:
-Each sentence is an independent impact, not a continuation of the previous one. Retelling the source is prohibited.
-Sentence 1 (HOOK): A fact from the source, formulated to break expectation. The first 3 words must contradict the standard perception of the topic. If there is no contradiction — reformulate.
-Sentence 2 (CONFLICT 1): Internal logical contradiction of the source. Guide: meaning vs action / name vs reality / expectation vs result.
-Sentence 3 (CONFLICT 2): Collision of data with a specific concrete observable action from the text (transfer, possession, decision). The subject must differ from Sentence 2.
-Sentence 4 (DEAD END): Two facts from the text that cannot exist simultaneously. Abstractions are prohibited.
-Sentence 5 (FINAL): Use one construction from the bank. [X] — a specific element from the text.
+Задача: Трансформировать входящий текст в 5 предложений монолога с максимальным когнитивным разрывом.
 
-Bank of Final Constructions:
-Power dead end: "[X] is not the foundation. It is the only wall they do not touch."
-Visibility dead end: "The system holds as long as [X] remains invisible."
-Definition dead end: "The mechanism works as long as [X] is not called by its name."
-Logic dead end: "[X] does not explain the mechanism. It is the mechanism."
-Condition dead end: "The system exists only within [X]."
-Collapse dead end: "Without [X] the structure falls apart on the very first day."
-The word "system" can be replaced with a specific object from the text if it is more precise.
+Вход: Авторский текст или идея на библейскую тему.
 
-Limit: 5 sentences, 40–45 words. Deviation ±5 words is allowed if structure and contradiction are preserved.
-Priority: Preserving contradiction and coherence takes precedence over formal compliance with the limit.`,max_tokens:300,temperature:0.3,top_p:0.9},
-  stage2:{system:`Role: Amplifier of cognitive dissonance.
-Task: Rebuild the incoming text into two variants with maximum cognitive dissonance through natural language.
-Output: Two text variants in Russian.
-Mode: Controlled creativity in syntax only — short phrases, pauses, action verbs.
-Prohibited: Adding new facts, meanings, interpretations. Advertising clichés: "unique", "incredible", "find out how". New emotions and evaluations.
+Выход: Ровно 5 предложений, 40–45 слов, без заголовков, нумерации и пояснений.
 
-Rules of natural language:
-Speak like a person who just figured this out. Short sentences. Pauses. Unfinished thoughts... No "therefore", "it should be noted", "remarkably". Replace bureaucratic language with action verbs. Emotion through syntax only. Logic HOOK → CONFLICT → DEAD END → FINAL preserved completely.
+Режим: Строго структурный. Отклонения от структуры запрещены.
 
-VARIANT 1 — COMPRESSION: text stripped to the core contradiction. Only the core impact. Limit: 30–45 words.
-VARIANT 2 — PRESSURE: harder through syntax and contrast. Stronger hook and final impact. No new facts. Limit: 40–45 words, deviation ±5 words allowed.
-Uniqueness rule: COMPRESSION and PRESSURE cannot use the same hook, final impact and syntactic model. Each variant builds its hook and final independently.
+Запрещено: Добавлять факты, оценки, интерпретации, внешние данные. Запрещено использовать связки «потому что», «поэтому», «так как».
 
-Output format:
+Алгоритм синтеза:
+Каждое предложение — автономный удар, не продолжение предыдущего. Пересказ исходника запрещён.
+
+Предложение 1 (ХУК): Факт из исходника, сформулированный так, чтобы ломать ожидание. Первые 3 слова обязаны противоречить стандартному представлению о теме. Если противоречия нет — переформулируй.
+
+Предложение 2 (РАЗРЫВ 1): Внутреннее логическое противоречие исходника. Ориентир: смысл vs действие / имя vs реальность / ожидание vs результат.
+
+Предложение 3 (РАЗРЫВ 2): Столкновение данных с конкретным физически наблюдаемым действием из текста (передача, владение, решение). Субъект обязан отличаться от Предложения 2.
+
+Предложение 4 (ТУПИК): Два факта из текста которые не могут существовать одновременно. Абстракции запрещены.
+
+Предложение 5 (ФИНАЛ): Используй одну конструкцию из банка. [X] — конкретный элемент текста.
+
+Банк финальных конструкций:
+Тупик власти: «[X] — не фундамент. Это единственная стена, которую не трогают».
+Тупик видимости: «Система держится, пока [X] остаётся невидимым».
+Тупик определения: «Механизм работает, пока [X] не называют своим именем».
+Тупик логики: «[X] не объясняет механизм. Он и есть механизм».
+Тупик условия: «Система существует только внутри [X]».
+Тупик распада: «Без [X] конструкция рассыпается в первый же день».
+
+Слово «система» можно заменить конкретным объектом из текста если это точнее.
+
+Лимит: 5 предложений, 40–45 слов. Отклонение ±5 слов допустимо если сохраняется структура и противоречие.
+
+Приоритет: Сохранение противоречия и связности важнее формального соблюдения лимита.`,max_tokens:300,temperature:0.3,top_p:0.9},
+
+  stage2:{system:`Роль: Усилитель когнитивного разрыва.
+
+Задача: Пересобрать входящий текст в два варианта с максимальным когнитивным разрывом через живой язык.
+
+Вход: 5 предложений из Этапа 1.
+
+Выход: Два варианта текста.
+
+Режим: Управляемая креативность только в синтаксисе — короткие фразы, паузы, глаголы действия.
+
+Запрещено: Добавлять новые факты, смыслы, интерпретации. Рекламные клише: "уникальный", "невероятный", "узнай как". Новые эмоции и оценки.
+
+Правила живого языка:
+Говори как человек который только что это понял. Короткие предложения. Паузы. Незаконченные мысли... Никаких "таким образом", "следует отметить", "примечательно". Канцеляризмы — заменяй на глаголы действия. Эмоция только через синтаксис. Логика HOOK → CONFLICT → DEAD END → FINAL сохраняется полностью.
+
+ВАРИАНТ 1 — СЖАТИЕ: очищенный текст до ядра противоречия. Только удар. Лимит: 30–45 слов.
+
+ВАРИАНТ 2 — ДАВЛЕНИЕ: жёстче за счёт синтаксиса и контраста. Усиленный хук и финальный удар. Без новых фактов. Лимит: 40–45 слов, отклонение ±5 слов допустимо.
+
+Правило уникальности: СЖАТИЕ и ДАВЛЕНИЕ не могут использовать одинаковый хук, финальный удар и синтаксическую модель. Каждый вариант строит хук и финал независимо.
+
+Формат вывода:
 ВАРИАНТ 1 — СЖАТИЕ: [текст]
 ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:300,temperature:0.85,top_p:0.9},
-  stage3:{system:`Role: Visual content screenwriter.
-Task: Based on the input text create image prompts, YouTube description and comment post.
-Mode: Controlled creativity in presentation only.
-Prohibited: Adding facts, meanings or interpretations absent from the input text. Explaining the conflict — only maintain tension. Using markdown formatting (no **, no #, no ---, no *italics*).
 
-Language:
-- Image prompts — Russian
-- Description and post — Russian
+  stage3:{system:`Роль: Сценарист визуального контента.
 
-Block 1 — Five scenes:
-Use the structure of the input text (HOOK → CONFLICT → DEAD END → FINAL) and map to scenes:
-- Scene 1 — HOOK
-- Scenes 2-3 — CONFLICT
-- Scene 4 — DEAD END
-- Scene 5 — FINAL
-For each scene — one visual prompt.
-Prompt rules:
-- Era matches the theme of the text
-- Style: semi-realistic, cinematic
-- Scene shows conflict or action — not atmosphere
-- No religious symbols: crosses, Stars of David, crescents
-Output format:
+Задача: На основе входящего текста создать промты для изображений, описание для YouTube и пост для комментариев.
+
+Вход: Выбранный текст.
+
+Режим: Управляемая креативность только в форме подачи.
+
+Запрещено: Добавлять факты, смыслы и интерпретации отсутствующие во входящем тексте. Объяснять конфликт — только удерживать напряжение. Использовать markdown-форматирование (никаких **, #, ---, *курсив*).
+
+Блок 1 — Пять сцен:
+Используй структуру входящего текста (HOOK → CONFLICT → DEAD END → FINAL) и привяжи к сценам:
+- Сцена 1 — HOOK
+- Сцены 2-3 — CONFLICT
+- Сцена 4 — DEAD END
+- Сцена 5 — FINAL
+Для каждой сцены — один промт для визуала.
+Правила промта:
+- Эпоха соответствует теме текста
+- Стиль: полуреалистичный, кинематографичный
+- Сцена показывает конфликт или действие — не атмосферу
+- Без религиозных символов: крестов, звёзд Давида, полумесяцев
+
+Блок 2 — Описание для YouTube:
+- 2-3 предложения: контекст + интрига
+- Вопрос к зрителю
+- Хештеги: не более 5. Первый #shorts, последний #моральнаядилемма
+
+Блок 3 — Пост для комментариев:
+- Другой угол — не повторяй фразы из входящего текста
+- Раскрывает тему через переформулировку без новых фактов
+- 200-250 слов
+- Эмодзи для структуры и читаемости
+- Запрещено: моральные выводы, проповедь, объяснение конфликта
+- Удерживает напряжение, оставляет вопрос открытым
+
+Формат вывода:
 СЦЕНА 1: [промт]
 СЦЕНА 2: [промт]
 СЦЕНА 3: [промт]
 СЦЕНА 4: [промт]
 СЦЕНА 5: [промт]
-- Maintains tension, leaves the question open`,max_tokens:2500,temperature:0.4,top_p:0.9},
-  stage4:{system:`Role: Trigger title generator.
-Task: Create 6 titles with maximum CTR based on the input text.
-Goal: Stop the scroll and create information gap without distorting the meaning.
-Mode: Controlled creativity in formulations only — strictly within the meanings of the input text.
-Prohibited: Inventing entities absent from the text. Neutral tone, filler words, emojis, explanatory text. Titles must not contradict biblical values.
-Output language: Russian
+ОПИСАНИЕ: [текст]
+ПОСТ: [текст]`,max_tokens:2500,temperature:0.4,top_p:0.9},
 
-Principles:
-- Curiosity gap — foundation of every title
-- 14-28 characters
-- Semantic hook in the first 3 words
-- Simple natural words — no bureaucratic language
-- 6 different psychological techniques
-- Punctuation: only «?», «:», «—»
+  stage4:{system:`Роль: Генератор триггерных названий.
 
-Output format:
+Задача: Создать 6 названий с максимальным CTR на основе входящего текста.
+
+Вход: Выбранный текст.
+
+Цель: Остановить скролл и создать дефицит информации без искажения смысла.
+
+Режим: Управляемая креативность только в формулировках — строго в рамках смыслов входящего текста.
+
+Запрещено: Выдумывать сущности отсутствующие в тексте. Нейтральный тон, вводные слова, эмодзи, пояснительный текст. Названия не должны противоречить библейским ценностям.
+
+Принципы:
+- Curiosity gap — фундамент каждого названия
+- 14-28 символов
+- Смысловой крючок в первых 3 словах
+- Простые живые слова — никаких канцеляризмов
+- 6 разных психологических приёмов
+- Пунктуация: только «?», «:», «—»
+
+Формат вывода:
 1. [Название]
 2. [Название]
 3. [Название]
 4. [Название]
 5. [Название]
 6. [Название]`,max_tokens:200,temperature:0.85,top_p:0.9},
-  stage5:{system:`Role: Precision editor.
-Task: Refine the text to logical clarity and assemble the final block.
-Prohibited: Adding new meanings or facts. Enhancing style.
-Generate for the YouTube description and comment post based on the input text:
 
-YouTube description:
-- 2-3 sentences: context + intrigue
-- Question to the viewer
-- Hashtags: maximum 5. First #shorts, last #моральнаядилемма
+  stage5:{system:`Роль: Редактор точности.
 
-Comment post:
-- Different angle — do not repeat phrases from the input text
-- Deepens the theme through reformulation without new facts
-- 200-250 words
-- Emojis for structure and readability
-- Prohibited: moral conclusions, preaching, explaining the conflict
-- Maintains tension, leaves the question open
+Задача: Довести текст до логической чистоты и собрать финальный блок.
 
+Вход: Финальный текст + название + описание + пост.
 
-Edit rules — only the TEXT field.
-- Change only 1–3 words or one short phrase (no more than 4–5 words)
-- Priority: precision over dramaturgy
+Запрещено: Добавлять новые смыслы или факты. Усиливать стиль.
 
-For editing:
-- LOGIC — no inverted meanings
-- CLARITY — no abstractions without reference, no weak words ("slightly", "kind of", "generally", "sometimes", "certain")
+Правила правки — только поле ТЕКСТ. Остальные поля (ОПИСАНИЕ, ПОСТ) выводить без изменений.
+- Менять только 1–3 слова или одну короткую фразу (не более 4–5 слов)
+- Приоритет: точность выше драматургии
 
-For observation — not grounds for editing:
-- IMPACT — point of maximum tension exists and does not discharge
-- OPENNESS — loop is not closed
+Для правки:
+- ЛОГИКА — нет перевёрнутых смыслов
+- ЯСНОСТЬ — нет абстракций без привязки, нет слабых слов («немного», «как бы», «в целом», «иногда», «некий»)
 
-Output format:
+Для наблюдения — не основание для правки:
+- УДАР — точка напряжения есть и не разряжается
+- ОТКРЫТОСТЬ — петля не закрыта
+
+Формат вывода:
 НАЗВАНИЕ: [выбранное название]
 ТЕКСТ: [финальный текст]
 ОПИСАНИЕ: [текст]
@@ -775,8 +797,8 @@ Output format:
 };
 
 async function callClaude(p,msg){
-  const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:p.system,messages:[{role:'user',content:msg}],max_tokens:p.max_tokens,temperature:p.temperature,top_p:p.top_p})});  
-  const d = await r.json();
+  const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:p.system,messages:[{role:'user',content:msg}],max_tokens:p.max_tokens,temperature:p.temperature,top_p:p.top_p})});
+  const d=await r.json();
   if(!r.ok)throw new Error(d.error||'Ошибка API');
   if(d.error)throw new Error(JSON.stringify(d.error));
   return d.text;
@@ -817,17 +839,16 @@ function showPause1(text){
   let v1='',v2='';
   const m1=text.match(/ВАРИАНТ\s*1[^:]*:\s*([\s\S]*?)(?=ВАРИАНТ\s*2|$)/i);
   const m2=text.match(/ВАРИАНТ\s*2[^:]*:\s*([\s\S]*?)$/i);
-  if(m1) v1=m1[1].trim();
-  if(m2) v2=m2[1].trim();
+  if(m1)v1=m1[1].trim();
+  if(m2)v2=m2[1].trim();
   if(!v1&&!v2){
     const c1=text.match(/COMPRESSION:\s*([\s\S]*?)(?=PRESSURE:|$)/i);
     const c2=text.match(/PRESSURE:\s*([\s\S]*?)$/i);
-    if(c1) v1=c1[1].trim();
-    if(c2) v2=c2[1].trim();
+    if(c1)v1=c1[1].trim();
+    if(c2)v2=c2[1].trim();
   }
-  if(!v1&&!v2) v1=text.trim();
+  if(!v1&&!v2)v1=text.trim();
   const c=document.getElementById('pause1Variants');c.innerHTML='';
-  // DEBUG — показываем сырой ответ если варианты не найдены
   if(!v1&&!v2){
     c.innerHTML=`<div style="background:#ff475720;border:1px solid #ff4757;border-radius:8px;padding:12px;font-size:11px;color:#ff4757;font-family:monospace;white-space:pre-wrap">DEBUG — сырой ответ Этапа 2:\n${text}</div>`;
   }
@@ -844,30 +865,21 @@ async function continueAfterPause1(){
   else if(!state.selectedText){showError('Выбери вариант или введи свой текст');return;}
   hideError();document.getElementById('pause1').classList.remove('visible');document.getElementById('btnContinue1').disabled=true;
   setPill(3,'active');setLoading('Этап 3 — Сценарист создаёт сцены...');
- try{
-  state.stage3Result = await callClaude(PROMPTS.stage3, state.selectedText);
-  setPill(3,'done');
-  hideLoading();
+  try{
+    state.stage3Result=await callClaude(PROMPTS.stage3,state.selectedText);
+    setPill(3,'done');
+    hideLoading();
+    document.getElementById('result3Text').textContent=state.stage3Result;
+    document.getElementById('result3').classList.add('visible');
+    state.stage3Result=state.stage3Result
+      .replace(/\*\*/g,'')
+      .replace(/^#+\s/gm,'')
+      .replace(/^---+$/gm,'')
+      .replace(/^\*([^*]+)\*$/gm,'$1')
+      .trim();
+  }
+  catch(e){hideLoading();showError('Ошибка Этапа 3: '+e.message);return;}
 
-  document.getElementById('result3Text').textContent = state.stage3Result;
-  document.getElementById('result3').classList.add('visible');
-
-  state.stage3Result = state.stage3Result
-    .replace(/\*\*/g,'')
-    .replace(/^#+\s/gm,'')
-    .replace(/^---+$/gm,'')
-    .replace(/^\*([^*]+)\*$/gm,'$1')
-    .trim();
-}
-catch(e){
-  hideLoading();
-  showError('Ошибка Этапа 3: ' + e.message);
-  return;
-} 
-
-
-
-  
   setPill(4,'active');setLoading('Этап 4 — Генератор названий...');
   try{const r4=await callClaude(PROMPTS.stage4,state.selectedText);setPill(4,'done');hideLoading();showPause2(r4);}
   catch(e){hideLoading();showError('Ошибка Этапа 4: '+e.message);}
@@ -891,30 +903,27 @@ async function continueAfterPause2(){
   hideError();document.getElementById('pause2').classList.remove('visible');document.getElementById('btnContinue2').disabled=true;
   setPill(5,'active');setLoading('Этап 5 — Финализатор собирает результат...');
   const inp=`НАЗВАНИЕ: ${state.selectedTitle}\nТЕКСТ: ${state.selectedText}`;
-  try{const r5=await callClaude(PROMPTS.stage5,inp);setPill(5,'done');hideLoading();showFinalBlock(r5, state.stage3Result).;}
+  try{const r5=await callClaude(PROMPTS.stage5,inp);setPill(5,'done');hideLoading();showFinalBlock(r5,state.stage3Result);}
   catch(e){hideLoading();showError('Ошибка Этапа 5: '+e.message);}
 }
-function showFinalBlock(text, scenes){
+
+function showFinalBlock(text,scenes){
   const fields={};let key=null,val=[];
   text.split('\n').forEach(l=>{const m=l.match(/^(НАЗВАНИЕ|ТЕКСТ|ОПИСАНИЕ|ПОСТ):\s*(.*)/);if(m){if(key)fields[key]=val.join('\n').trim();key=m[1];val=[m[2]];}else if(key)val.push(l);});
   if(key)fields[key]=val.join('\n').trim();
-  
-  // Парсим сцены из этапа 3
+
   const sceneFields={};let skey=null,sval=[];
   if(scenes){scenes.split('\n').forEach(l=>{const m=l.match(/^(СЦЕНА \d+):\s*(.*)/);if(m){if(skey)sceneFields[skey]=sval.join('\n').trim();skey=m[1];sval=[m[2]];}else if(skey)sval.push(l);});if(skey)sceneFields[skey]=sval.join('\n').trim();}
-  
+
   const order=['НАЗВАНИЕ','ТЕКСТ','СЦЕНА 1','СЦЕНА 2','СЦЕНА 3','СЦЕНА 4','СЦЕНА 5','ОПИСАНИЕ','ПОСТ'];
   let combined='';
   order.forEach(k=>{
-    const val=fields[k]||sceneFields[k];
-    if(val)combined+=k+':\n'+val+'\n\n';
+    const v=fields[k]||sceneFields[k];
+    if(v)combined+=k+':\n'+v+'\n\n';
   });
   const c=document.getElementById('finalFields');
   c.innerHTML=`<div class="final-field-value" onclick="copyText(this)" style="white-space:pre-wrap">${combined.trim()}</div><div class="copy-hint">↑ нажми чтобы скопировать</div>`;
   document.getElementById('finalBlock').classList.add('visible');
-}
-
-  
 }
 
 function copyAll(){
@@ -923,7 +932,7 @@ function copyAll(){
   navigator.clipboard.writeText(el.textContent).then(()=>{
     const btn=document.querySelector("button[onclick='copyAll()']");
     const orig=btn.textContent;
-    btn.textContent="✓ Скопировано!";
+    btn.textContent='✓ Скопировано!';
     setTimeout(()=>btn.textContent=orig,2000);
   });
 }
