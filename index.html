@@ -659,11 +659,12 @@ const PROMPTS={
 
 Предложение 5 (ФИНАЛ):
 Короткий удар, фиксирующий конфликт.
-Не объясняет — оставляет напряжение.
+Запрещено: объяснять механизм, называть имена авторитетов, давать оценку, закрывать вопрос.
+Финал должен оставлять читателя в точке невозврата — без ответа.
+Запрещено: заканчивать вопросом.
 
 Общий принцип:
-Сохраняй противоречие и связность.
-Финал может при желании использовать жёсткую формулировку, но без обязательных шаблонов.`,max_tokens:175,temperature:0.4,top_p:0.9}
+Сохраняй противоречие и связность.`,max_tokens:400,temperature:0.3,top_p:0.9}
 };
 
 async function checkStatus(){
@@ -722,8 +723,6 @@ function resetPipeline(){
   document.getElementById('loading').classList.remove('visible');
   document.getElementById('errorMsg').classList.remove('visible');
 }
-
-  
 checkStatus();
 </script>
 </body>
