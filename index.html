@@ -585,13 +585,15 @@
       <div class="error-msg" id="errorMsg"></div>
       <div class="loading" id="loading"><div class="spinner"></div><span id="loadingText">Обработка...</span></div>
 
-      <div class="result-block" id="resultBlock">
-        <div class="result-label"><span class="step-num">01</span> Архитектор</div>
-        <div class="result-text" id="resultText"></div>
-        <div style="display:flex;gap:12px;margin-top:16px">
-          <button class="btn-continue" id="btnCopy" onclick="copyResult()">⎘ Скопировать</button>
-          <button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
+      <div class="pause-block" id="pauseVariants">
+        <div class="pause-label">⏸ Выбери вариант</div>
+        <div class="pause-variants" id="variantsList"></div>
+        <div class="pause-custom">
+          <div class="input-label">Или введи свой вариант</div>
+          <textarea id="customVariant" placeholder="Свой текст..."></textarea>
         </div>
+        <button class="btn-continue" id="btnSelectVariant" onclick="selectAndCopy()">⎘ Скопировать выбранный</button>
+        <button class="btn-reset" style="margin-top:8px" onclick="resetPipeline()">↺ Новый текст</button>
       </div>
     </div>
   </div>
@@ -664,7 +666,44 @@ const PROMPTS={
 Запрещено: заканчивать вопросом.
 
 Общий принцип:
-Сохраняй противоречие и связность.`,max_tokens:400,temperature:0.3,top_p:0.9}
+Сохраняй противоречие и связность.`,max_tokens:400,temperature:0.3,top_p:0.9},
+
+  stage2:{system:`Роль: Усилитель когнитивного разрыва.
+
+Задача: Пересобрать входящий текст в два варианта с максимальным когнитивным разрывом через живой язык.
+
+Вход: 5 предложений из Этапа 1.
+
+Выход: Два варианта текста — ровно 5 предложений каждый.
+
+Режим: Управляемая креативность только в синтаксисе — короткие фразы, паузы, глаголы действия.
+
+Запрещено: Добавлять новые факты, смыслы, интерпретации. Рекламные клише: "уникальный", "невероятный", "узнай как". Новые эмоции и оценки.
+
+Запрещено заменять факты интерпретациями, обобщениями или метафорами.
+Каждое предложение должно сохранять исходный смысл без переосмысления.
+Например: «долг», «страховка», «давление» — запрещены, если их нет во входе.
+
+Правила живого языка:
+Говори как человек который только что это понял. Короткие предложения. Паузы. Незаконченные мысли... Никаких "таким образом", "следует отметить", "примечательно". Канцеляризмы — заменяй на глаголы действия. Запрещено использовать эмоциональные слова. Напряжение создаётся только через синтаксис и столкновение фактов. Логика HOOK → CONFLICT → ACTION → DEAD END → FINAL сохраняется полностью.
+
+Каждый элемент (HOOK, CONFLICT, ACTION, DEAD END, FINAL) должен быть переписан из соответствующего предложения входа, а не создан заново.
+Порядок элементов строго сохраняется. Перестановка запрещена.
+
+Финал подчиняется правилам Этапа 1: запрещено объяснять, обобщать, морализировать и выходить из сцены.
+
+Каждый вариант обязан содержать ровно 5 предложений.
+Удаление, объединение или добавление предложений запрещено.
+
+ВАРИАНТ 1 — СЖАТИЕ: очищенный текст до ядра противоречия. Только удар. Лимит: 30–45 слов.
+
+ВАРИАНТ 2 — ДАВЛЕНИЕ: жёстче за счёт синтаксиса и контраста. Усиленный хук и финальный удар. Без новых фактов. Лимит: 40–45 слов, отклонение ±5 слов допустимо.
+
+Правило уникальности: СЖАТИЕ и ДАВЛЕНИЕ не могут использовать одинаковый хук, финальный удар и синтаксическую модель. Каждый вариант строит хук и финал независимо.
+
+Формат вывода:
+ВАРИАНТ 1 — СЖАТИЕ: [текст]
+ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:600,temperature:0.7,top_p:0.9}
 };
 
 async function checkStatus(){
@@ -683,35 +722,73 @@ function hideLoading(){document.getElementById('loading').classList.remove('visi
 function showError(m){const el=document.getElementById('errorMsg');el.textContent=m;el.classList.add('visible');}
 function hideError(){document.getElementById('errorMsg').classList.remove('visible');}
 
+let selectedVariantText = '';
+
 async function runPipeline(){
   const input=document.getElementById('userInput').value.trim();
   if(!input)return;
   hideError();
   document.getElementById('btnRun').disabled=true;
   document.getElementById('userInput').disabled=true;
-  setLoading('Архитектор строит структуру...');
+  setLoading('Этап 1 — Архитектор строит структуру...');
+  let stage1Result='';
   try{
-    const result=await callClaude(PROMPTS.stage1,input);
-    hideLoading();
-    document.getElementById('resultText').textContent=result;
-    document.getElementById('resultBlock').classList.add('visible');
-    document.getElementById('resultBlock').scrollIntoView({behavior:'smooth',block:'start'});
+    stage1Result=await callClaude(PROMPTS.stage1,input);
   }
   catch(e){
     hideLoading();
-    showError('Ошибка: '+e.message);
+    showError('Ошибка Этапа 1: '+e.message);
+    document.getElementById('btnRun').disabled=false;
+    document.getElementById('userInput').disabled=false;
+    return;
+  }
+  setLoading('Этап 2 — Усилитель создаёт варианты...');
+  try{
+    const result2=await callClaude(PROMPTS.stage2,stage1Result);
+    hideLoading();
+    showVariants(result2);
+  }
+  catch(e){
+    hideLoading();
+    showError('Ошибка Этапа 2: '+e.message);
     document.getElementById('btnRun').disabled=false;
     document.getElementById('userInput').disabled=false;
   }
 }
 
-function copyResult(){
-  const el=document.getElementById('resultText');
-  if(!el)return;
-  navigator.clipboard.writeText(el.textContent).then(()=>{
-    const btn=document.getElementById('btnCopy');
+function showVariants(text){
+  let v1='',v2='';
+  const m1=text.match(/ВАРИАНТ\s*1[^:]*:\s*([\s\S]*?)(?=ВАРИАНТ\s*2|$)/i);
+  const m2=text.match(/ВАРИАНТ\s*2[^:]*:\s*([\s\S]*?)$/i);
+  if(m1)v1=m1[1].trim();
+  if(m2)v2=m2[1].trim();
+  if(!v1&&!v2)v1=text.trim();
+  const c=document.getElementById('variantsList');
+  c.innerHTML='';
+  if(v1)c.innerHTML+=`<div class="variant-card" onclick="selectVariant(this,\`${v1.replace(/`/g,'\`').replace(/
+/g,'\n')}\`)"><div class="variant-label">Вариант 1 — Сжатие</div><div class="variant-text">${v1}</div></div>`;
+  if(v2)c.innerHTML+=`<div class="variant-card" onclick="selectVariant(this,\`${v2.replace(/`/g,'\`').replace(/
+/g,'\n')}\`)"><div class="variant-label">Вариант 2 — Давление</div><div class="variant-text">${v2}</div></div>`;
+  document.getElementById('pauseVariants').classList.add('visible');
+  document.getElementById('pauseVariants').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function selectVariant(el,text){
+  selectedVariantText=text.replace(/\n/g,'
+');
+  document.querySelectorAll('.variant-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('customVariant').value='';
+}
+
+function selectAndCopy(){
+  const custom=document.getElementById('customVariant').value.trim();
+  const text=custom||selectedVariantText;
+  if(!text){showError('Выбери вариант или введи свой');return;}
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('btnSelectVariant');
     btn.textContent='✓ Скопировано!';
-    setTimeout(()=>btn.textContent='⎘ Скопировать',2000);
+    setTimeout(()=>btn.textContent='⎘ Скопировать выбранный',2000);
   });
 }
 
@@ -719,10 +796,15 @@ function resetPipeline(){
   document.getElementById('userInput').value='';
   document.getElementById('userInput').disabled=false;
   document.getElementById('btnRun').disabled=false;
-  document.getElementById('resultBlock').classList.remove('visible');
+  document.getElementById('pauseVariants').classList.remove('visible');
   document.getElementById('loading').classList.remove('visible');
   document.getElementById('errorMsg').classList.remove('visible');
+  document.getElementById('customVariant').value='';
+  document.getElementById('btnSelectVariant').disabled=false;
+  selectedVariantText='';
+  document.querySelectorAll('.variant-card').forEach(c=>c.classList.remove('selected'));
 }
+
 checkStatus();
 </script>
 </body>
