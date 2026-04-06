@@ -5,618 +5,360 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Моральная Дилемма — Авторский проект Юдкевича</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
- 
-  :root {
-    --bg: #0d0d14;
-    --bg2: #13131f;
-    --bg3: #1c1c2e;
-    --border: #ffffff0a;
-    --border-hover: #ffffff18;
-    --text: #e8e8f0;
-    --text-dim: #6b6b80;
-    --text-muted: #3a3a4a;
-    --accent: #f0a500;
-    --accent2: #7c6fff;
-    --green: #4caf7d;
-    --red: #ff4757;
-    --blue: #4a9eff;
-    --orange: #ff6b35;
-    --purple: #b06fff;
-    --teal: #00d4aa;
-    --pink: #ff6b9d;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+--bg: #0d0d14;
+--bg2: #13131f;
+--bg3: #1c1c2e;
+--border: #ffffff0a;
+--border-hover: #ffffff18;
+--text: #e8e8f0;
+--text-dim: #6b6b80;
+--text-muted: #3a3a4a;
+--accent: #f0a500;
+--accent2: #7c6fff;
+--green: #4caf7d;
+--red: #ff4757;
+--blue: #4a9eff;
+--orange: #ff6b35;
+--purple: #b06fff;
+--teal: #00d4aa;
+--pink: #ff6b9d;
+}
 
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* HEADER */
-  .header {
-    position: fixed; top:0; left:0; right:0; z-index:100;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 32px; height: 60px;
-  }
+body {
+font-family: 'Montserrat', sans-serif;
+background: var(--bg);
+color: var(--text);
+min-height: 100vh;
+overflow-x: hidden;
+}
 
-  .logo { display:flex; align-items:center; gap:12px; cursor:pointer; }
-  .logo-icon { width:36px; height:36px; background:var(--accent2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; color:white; }
-  .logo-text { display:flex; flex-direction:column; }
-  .logo-title { font-size:13px; font-weight:700; letter-spacing:.5px; }
-  .logo-sub { font-size:9px; font-weight:500; color:var(--text-dim); letter-spacing:1.5px; text-transform:uppercase; }
+.header {
+position: fixed; top:0; left:0; right:0; z-index:100;
+background: var(--bg);
+border-bottom: 1px solid var(--border);
+display: flex; align-items: center; justify-content: space-between;
+padding: 0 32px; height: 60px;
+}
 
-  .status { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
-  .status-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); }
-  .status-dot.ok { background:var(--green); box-shadow:0 0 6px var(--green); animation:pulse 2s infinite; }
-  .status-dot.error { background:var(--red); box-shadow:0 0 6px var(--red); animation:none; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.logo { display:flex; align-items:center; gap:12px; cursor:pointer; }
+.logo-icon { width:36px; height:36px; background:var(--accent2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; color:white; }
+.logo-text { display:flex; flex-direction:column; }
+.logo-title { font-size:13px; font-weight:700; letter-spacing:.5px; }
+.logo-sub { font-size:9px; font-weight:500; color:var(--text-dim); letter-spacing:1.5px; text-transform:uppercase; }
 
-  .main { padding-top:60px; min-height:100vh; }
-  .page { display:none; }
-  .page.active { display:block; }
+.status { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
+.status-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); }
+.status-dot.ok { background:var(--green); box-shadow:0 0 6px var(--green); animation:pulse 2s infinite; }
+.status-dot.error { background:var(--red); box-shadow:0 0 6px var(--red); animation:none; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-  /* HOME */
-  .home { display:flex; min-height:calc(100vh - 60px); }
+.main { padding-top:60px; min-height:100vh; }
+.page { display:none; }
+.page.active { display:block; }
 
-  /* SIDEBAR */
-  .sidebar {
-    width:200px; min-width:200px;
-    background: var(--bg2);
-    border-right: 1px solid var(--border);
-    padding: 32px 0;
-    position: sticky; top:60px;
-    height: calc(100vh - 60px);
-    overflow-y: auto;
-  }
+.home { display:flex; min-height:calc(100vh - 60px); }
 
-  .sidebar-label { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); padding:0 20px; margin-bottom:8px; }
-  .sidebar-item { display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:12px; font-weight:600; color:var(--text-dim); cursor:pointer; transition:all .15s; border-left:2px solid transparent; }
-  .sidebar-item:hover { color:var(--text); background:var(--bg3); }
-  .sidebar-item.active { color:var(--accent); border-left-color:var(--accent); background:#f0a50008; }
-  .sidebar-icon { font-size:14px; }
-  .sidebar-divider { height:1px; background:var(--border); margin:16px 20px; }
+.sidebar {
+width:200px; min-width:200px;
+background: var(--bg2);
+border-right: 1px solid var(--border);
+padding: 32px 0;
+position: sticky; top:60px;
+height: calc(100vh - 60px);
+overflow-y: auto;
+}
 
-  /* CONTENT */
-  .content { flex:1; padding:40px; overflow-y:auto; }
-  .tab-content { display:none; }
-  .tab-content.active { display:block; }
+.sidebar-label { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); padding:0 20px; margin-bottom:8px; }
+.sidebar-item { display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:12px; font-weight:600; color:var(--text-dim); cursor:pointer; transition:all .15s; border-left:2px solid transparent; }
+.sidebar-item:hover { color:var(--text); background:var(--bg3); }
+.sidebar-item.active { color:var(--accent); border-left-color:var(--accent); background:#f0a50008; }
+.sidebar-icon { font-size:14px; }
+.sidebar-divider { height:1px; background:var(--border); margin:16px 20px; }
 
-  /* SECTION HEADER */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 28px;
-  }
+.content { flex:1; padding:40px; overflow-y:auto; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
 
-  .section-label-line {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
+.section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+.section-label-line { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+.section-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border-hover), transparent); }
+.section-desc { font-size:12px; color:var(--text-dim); margin-bottom:28px; }
 
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--border-hover), transparent);
-  }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 48px; }
 
-  .section-desc { font-size:12px; color:var(--text-dim); margin-bottom:28px; }
+.card { background: var(--bg2); border-radius: 14px; padding: 28px; cursor: pointer; transition: all .25s; position: relative; overflow: hidden; border: 1px solid var(--border); }
+.card-top-line { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; }
+.card:hover { transform: translateY(-3px); border-color: var(--border-hover); }
+.card.disabled { cursor: default; }
+.card.disabled:hover { transform: none; border-color: var(--border); }
+.card-badge { position: absolute; top:16px; right:16px; font-size: 9px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color: var(--text-dim); background: var(--bg3); border: 1px solid var(--border); padding: 3px 8px; border-radius:4px; }
+.card-icon-wrap { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 20px; }
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+.card-desc { font-size: 12px; color: var(--text-dim); line-height: 1.65; margin-bottom: 20px; }
+.card-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:0; }
+.tag { font-size: 10px; font-weight:600; padding: 4px 10px; border-radius:20px; font-family: 'JetBrains Mono', monospace; border: 1px solid; }
+.btn-dev { display: inline-flex; align-items: center; padding: 7px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: .5px; border: none; cursor: default; }
 
-  /* CARDS GRID */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-    margin-bottom: 48px;
-  }
+.theme-yellow .card-top-line { background: var(--accent); }
+.theme-yellow .card-icon-wrap { background: #f0a50018; }
+.theme-yellow .card-title { color: var(--accent); }
+.theme-yellow .tag { color: var(--accent); border-color: #f0a50030; background: #f0a50010; }
+.theme-blue .card-top-line { background: var(--blue); }
+.theme-blue .card-icon-wrap { background: #4a9eff18; }
+.theme-blue .card-title { color: var(--blue); }
+.theme-blue .btn-dev { background: #4a9eff20; color: var(--blue); }
+.theme-red .card-top-line { background: var(--red); }
+.theme-red .card-icon-wrap { background: #ff475718; }
+.theme-red .card-title { color: var(--red); }
+.theme-red .btn-dev { background: #ff475720; color: var(--red); }
+.theme-purple .card-top-line { background: var(--purple); }
+.theme-purple .card-icon-wrap { background: #b06fff18; }
+.theme-purple .card-title { color: var(--purple); }
+.theme-purple .btn-dev { background: #b06fff20; color: var(--purple); }
+.theme-teal .card-top-line { background: var(--teal); }
+.theme-teal .card-icon-wrap { background: #00d4aa18; }
+.theme-teal .card-title { color: var(--teal); }
+.theme-teal .btn-dev { background: #00d4aa20; color: var(--teal); }
+.theme-orange .card-top-line { background: var(--orange); }
+.theme-orange .card-icon-wrap { background: #ff6b3518; }
+.theme-orange .card-title { color: var(--orange); }
+.theme-orange .btn-dev { background: #ff6b3520; color: var(--orange); }
+.theme-pink .card-top-line { background: var(--pink); }
+.theme-pink .card-icon-wrap { background: #ff6b9d18; }
+.theme-pink .card-title { color: var(--pink); }
+.theme-pink .btn-dev { background: #ff6b9d20; color: var(--pink); }
+.theme-green .card-top-line { background: var(--green); }
+.theme-green .card-icon-wrap { background: #4caf7d18; }
+.theme-green .card-title { color: var(--green); }
+.theme-green .btn-dev { background: #4caf7d20; color: var(--green); }
 
-  /* CARD */
-  .card {
-    background: var(--bg2);
-    border-radius: 14px;
-    padding: 28px;
-    cursor: pointer;
-    transition: all .25s;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
+.analyzer-block { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:36px; position:relative; overflow:hidden; }
+.analyzer-block::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:linear-gradient(to right, var(--accent2), var(--accent)); }
+.analyzer-title { font-size:18px; font-weight:800; color:var(--accent2); margin-bottom:8px; letter-spacing:.5px; }
+.analyzer-badge { display:inline-block; font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); background:var(--bg3); border:1px solid var(--border); padding:3px 8px; border-radius:4px; margin-bottom:16px; }
+.analyzer-desc { font-size:13px; color:var(--text-dim); margin-bottom:28px; line-height:1.7; max-width:500px; }
+.analyzer-outputs { display:flex; gap:16px; flex-wrap:wrap; }
+.analyzer-output { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:20px 24px; display:flex; flex-direction:column; align-items:center; gap:10px; font-size:11px; font-weight:700; color:var(--text-dim); letter-spacing:.5px; text-transform:uppercase; min-width:100px; }
+.analyzer-output-icon { font-size:28px; }
 
-  .card-top-line {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    border-radius: 14px 14px 0 0;
-  }
+.pipeline-page { padding:32px; max-width:900px; margin:0 auto; }
+.page-back { display:flex; align-items:center; gap:8px; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); cursor:pointer; margin-bottom:32px; transition:color .2s; width:fit-content; }
+.page-back:hover { color:var(--text); }
+.pipeline-title { font-size:20px; font-weight:800; color:var(--accent); margin-bottom:4px; }
+.pipeline-sub { font-size:11px; color:var(--text-dim); margin-bottom:20px; }
 
-  .card:hover { transform: translateY(-3px); border-color: var(--border-hover); }
+.input-block { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:20px; }
+.input-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:12px; }
 
-  .card.disabled { cursor: default; }
-  .card.disabled:hover { transform: none; border-color: var(--border); }
+textarea { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:16px; color:var(--text); font-family:'Montserrat',sans-serif; font-size:13px; line-height:1.6; resize:vertical; min-height:120px; transition:border-color .2s; outline:none; }
+textarea:focus { border-color:var(--accent2); }
 
-  .card-badge {
-    position: absolute; top:16px; right:16px;
-    font-size: 9px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
-    color: var(--text-dim);
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 3px 8px; border-radius:4px;
-  }
+.btn-run { margin-top:16px; width:100%; padding:14px; background:var(--accent); color:#000; border:none; border-radius:8px; font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all .2s; }
+.btn-run:hover { background:#ffc233; transform:translateY(-1px); }
+.btn-run:disabled { opacity:.4; cursor:not-allowed; transform:none; }
 
-  .card-icon-wrap {
-    width: 48px; height: 48px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
+.result-block { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; display:none; }
+.result-block.visible { display:block; }
+.result-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.result-label .step-num { font-family:'JetBrains Mono',monospace; color:var(--accent); }
+.result-text { font-size:13px; line-height:1.8; color:var(--text); white-space:pre-wrap; font-family:'JetBrains Mono',monospace; background:var(--bg3); padding:16px; border-radius:8px; border:1px solid var(--border); }
 
-  .card-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    line-height: 1.3;
-  }
+.pause-block { background:var(--bg2); border:1px solid var(--accent2); border-radius:12px; padding:24px; margin-bottom:16px; display:none; }
+.pause-block.visible { display:block; }
+.pause-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin-bottom:16px; }
+.pause-variants { display:flex; flex-direction:column; gap:12px; margin-bottom:16px; }
+.variant-card { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:16px; cursor:pointer; transition:all .2s; }
+.variant-card:hover { border-color:var(--accent2); background:#7c6fff0a; }
+.variant-card.selected { border-color:var(--accent2); background:#7c6fff15; }
+.variant-label { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; font-family:'JetBrains Mono',monospace; }
+.variant-text { font-size:13px; line-height:1.7; color:var(--text); }
+.pause-custom { margin-top:12px; }
+.pause-custom textarea { min-height:80px; margin-bottom:12px; }
 
-  .card-desc {
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.65;
-    margin-bottom: 20px;
-  }
+.btn-continue { width:100%; padding:12px; background:var(--accent2); color:white; border:none; border-radius:8px; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all .2s; }
+.btn-continue:hover { background:#9585ff; transform:translateY(-1px); }
+.btn-continue:disabled { opacity:.4; cursor:not-allowed; transform:none; }
 
-  .card-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:0; }
+.loading { display:none; align-items:center; gap:10px; padding:16px; font-size:11px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
+.loading.visible { display:flex; }
+.spinner { width:16px; height:16px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
 
-  .tag {
-    font-size: 10px; font-weight:600;
-    padding: 4px 10px; border-radius:20px;
-    font-family: 'JetBrains Mono', monospace;
-    border: 1px solid;
-  }
+.titles-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.title-item { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:12px 16px; cursor:pointer; font-size:14px; font-weight:600; color:var(--text); transition:all .2s; display:flex; align-items:center; gap:12px; }
+.title-item:hover { border-color:var(--accent2); background:#7c6fff0a; }
+.title-item.selected { border-color:var(--accent2); background:#7c6fff15; color:var(--accent2); }
+.title-num { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-muted); min-width:20px; }
 
-  .btn-dev {
-    display: inline-flex;
-    align-items: center;
-    padding: 7px 14px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .5px;
-    border: none;
-    cursor: default;
-  }
+.error-msg { background:#ff475710; border:1px solid #ff475740; border-radius:8px; padding:12px 16px; font-size:12px; color:var(--red); font-family:'JetBrains Mono',monospace; display:none; margin-bottom:16px; }
+.error-msg.visible { display:block; }
 
-  /* COLOR THEMES */
-  .theme-yellow .card-top-line { background: var(--accent); }
-  .theme-yellow .card-icon-wrap { background: #f0a50018; }
-  .theme-yellow .card-title { color: var(--accent); }
-  .theme-yellow .tag { color: var(--accent); border-color: #f0a50030; background: #f0a50010; }
-
-  .theme-blue .card-top-line { background: var(--blue); }
-  .theme-blue .card-icon-wrap { background: #4a9eff18; }
-  .theme-blue .card-title { color: var(--blue); }
-  .theme-blue .btn-dev { background: #4a9eff20; color: var(--blue); }
-
-  .theme-red .card-top-line { background: var(--red); }
-  .theme-red .card-icon-wrap { background: #ff475718; }
-  .theme-red .card-title { color: var(--red); }
-  .theme-red .btn-dev { background: #ff475720; color: var(--red); }
-
-  .theme-purple .card-top-line { background: var(--purple); }
-  .theme-purple .card-icon-wrap { background: #b06fff18; }
-  .theme-purple .card-title { color: var(--purple); }
-  .theme-purple .btn-dev { background: #b06fff20; color: var(--purple); }
-
-  .theme-teal .card-top-line { background: var(--teal); }
-  .theme-teal .card-icon-wrap { background: #00d4aa18; }
-  .theme-teal .card-title { color: var(--teal); }
-  .theme-teal .btn-dev { background: #00d4aa20; color: var(--teal); }
-
-  .theme-orange .card-top-line { background: var(--orange); }
-  .theme-orange .card-icon-wrap { background: #ff6b3518; }
-  .theme-orange .card-title { color: var(--orange); }
-  .theme-orange .btn-dev { background: #ff6b3520; color: var(--orange); }
-
-  .theme-pink .card-top-line { background: var(--pink); }
-  .theme-pink .card-icon-wrap { background: #ff6b9d18; }
-  .theme-pink .card-title { color: var(--pink); }
-  .theme-pink .btn-dev { background: #ff6b9d20; color: var(--pink); }
-
-  .theme-green .card-top-line { background: var(--green); }
-  .theme-green .card-icon-wrap { background: #4caf7d18; }
-  .theme-green .card-title { color: var(--green); }
-  .theme-green .btn-dev { background: #4caf7d20; color: var(--green); }
-
-  /* ANALYZER */
-  .analyzer-block { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:36px; position:relative; overflow:hidden; }
-  .analyzer-block::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:linear-gradient(to right, var(--accent2), var(--accent)); }
-  .analyzer-title { font-size:18px; font-weight:800; color:var(--accent2); margin-bottom:8px; letter-spacing:.5px; }
-  .analyzer-badge { display:inline-block; font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); background:var(--bg3); border:1px solid var(--border); padding:3px 8px; border-radius:4px; margin-bottom:16px; }
-  .analyzer-desc { font-size:13px; color:var(--text-dim); margin-bottom:28px; line-height:1.7; max-width:500px; }
-  .analyzer-outputs { display:flex; gap:16px; flex-wrap:wrap; }
-  .analyzer-output { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:20px 24px; display:flex; flex-direction:column; align-items:center; gap:10px; font-size:11px; font-weight:700; color:var(--text-dim); letter-spacing:.5px; text-transform:uppercase; min-width:100px; }
-  .analyzer-output-icon { font-size:28px; }
-
-  /* PIPELINE PAGE */
-  .pipeline-page { padding:32px; max-width:900px; margin:0 auto; }
-  .page-back { display:flex; align-items:center; gap:8px; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); cursor:pointer; margin-bottom:32px; transition:color .2s; width:fit-content; }
-  .page-back:hover { color:var(--text); }
-  .pipeline-title { font-size:20px; font-weight:800; color:var(--accent); margin-bottom:4px; }
-  .pipeline-sub { font-size:11px; color:var(--text-dim); margin-bottom:20px; }
-  .pipeline-steps { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:32px; }
-  .step-pill { font-size:10px; font-weight:600; font-family:'JetBrains Mono',monospace; padding:4px 10px; border-radius:4px; border:1px solid var(--border); color:var(--text-dim); transition:all .3s; }
-  .step-pill.active { border-color:var(--accent); color:var(--accent); background:#f0a50010; }
-  .step-pill.done { border-color:var(--green); color:var(--green); background:#4caf7d10; }
-  .step-arrow { color:var(--text-muted); font-size:10px; }
-
-  .input-block { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:20px; }
-  .input-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:12px; }
-
-  textarea { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:16px; color:var(--text); font-family:'Montserrat',sans-serif; font-size:13px; line-height:1.6; resize:vertical; min-height:120px; transition:border-color .2s; outline:none; }
-  textarea:focus { border-color:var(--accent2); }
-
-  .btn-run { margin-top:16px; width:100%; padding:14px; background:var(--accent); color:#000; border:none; border-radius:8px; font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all .2s; }
-  .btn-run:hover { background:#ffc233; transform:translateY(-1px); }
-  .btn-run:disabled { opacity:.4; cursor:not-allowed; transform:none; }
-
-  .result-block { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; display:none; }
-  .result-block.visible { display:block; }
-  .result-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
-  .result-label .step-num { font-family:'JetBrains Mono',monospace; color:var(--accent); }
-  .result-text { font-size:13px; line-height:1.8; color:var(--text); white-space:pre-wrap; font-family:'JetBrains Mono',monospace; background:var(--bg3); padding:16px; border-radius:8px; border:1px solid var(--border); }
-
-  .pause-block { background:var(--bg2); border:1px solid var(--accent2); border-radius:12px; padding:24px; margin-bottom:16px; display:none; }
-  .pause-block.visible { display:block; }
-  .pause-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin-bottom:16px; }
-  .pause-variants { display:flex; flex-direction:column; gap:12px; margin-bottom:16px; }
-  .variant-card { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:16px; cursor:pointer; transition:all .2s; }
-  .variant-card:hover { border-color:var(--accent2); background:#7c6fff0a; }
-  .variant-card.selected { border-color:var(--accent2); background:#7c6fff15; }
-  .variant-label { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; font-family:'JetBrains Mono',monospace; }
-  .variant-text { font-size:13px; line-height:1.7; color:var(--text); }
-  .pause-custom { margin-top:12px; }
-  .pause-custom textarea { min-height:80px; margin-bottom:12px; }
-
-  .btn-continue { width:100%; padding:12px; background:var(--accent2); color:white; border:none; border-radius:8px; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all .2s; }
-  .btn-continue:hover { background:#9585ff; transform:translateY(-1px); }
-  .btn-continue:disabled { opacity:.4; cursor:not-allowed; transform:none; }
-
-  .loading { display:none; align-items:center; gap:10px; padding:16px; font-size:11px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
-  .loading.visible { display:flex; }
-  .spinner { width:16px; height:16px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .8s linear infinite; }
-  @keyframes spin { to{transform:rotate(360deg)} }
-
-  .titles-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
-  .title-item { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:12px 16px; cursor:pointer; font-size:14px; font-weight:600; color:var(--text); transition:all .2s; display:flex; align-items:center; gap:12px; }
-  .title-item:hover { border-color:var(--accent2); background:#7c6fff0a; }
-  .title-item.selected { border-color:var(--accent2); background:#7c6fff15; color:var(--accent2); }
-  .title-num { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-muted); min-width:20px; }
-
-  .final-block { background:var(--bg2); border:1px solid var(--green); border-radius:12px; padding:24px; display:none; }
-  .final-block.visible { display:block; }
-  .final-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--green); margin-bottom:20px; }
-  .final-field { margin-bottom:16px; }
-  .final-field-label { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-family:'JetBrains Mono',monospace; }
-  .final-field-value { font-size:13px; line-height:1.7; color:var(--text); background:var(--bg3); padding:12px 16px; border-radius:8px; border:1px solid var(--border); white-space:pre-wrap; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:border-color .2s; }
-  .final-field-value:hover { border-color:var(--green); }
-  .copy-hint { font-size:9px; color:var(--text-muted); margin-top:4px; font-family:'JetBrains Mono',monospace; }
-
-  .error-msg { background:#ff475710; border:1px solid #ff475740; border-radius:8px; padding:12px 16px; font-size:12px; color:var(--red); font-family:'JetBrains Mono',monospace; display:none; margin-bottom:16px; }
-  .error-msg.visible { display:block; }
-
-  .btn-reset { margin-top:16px; padding:10px 20px; background:transparent; color:var(--text-dim); border:1px solid var(--border); border-radius:8px; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:600; cursor:pointer; transition:all .2s; }
-  .btn-reset:hover { border-color:var(--border-hover); color:var(--text); }
+.btn-reset { margin-top:16px; padding:10px 20px; background:transparent; color:var(--text-dim); border:1px solid var(--border); border-radius:8px; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:600; cursor:pointer; transition:all .2s; }
+.btn-reset:hover { border-color:var(--border-hover); color:var(--text); }
 </style>
 </head>
 <body>
 
 <header class="header">
-  <div class="logo" onclick="showPage('home')">
-    <div class="logo-icon">YD</div>
-    <div class="logo-text">
-      <span class="logo-title">Моральная Дилемма</span>
-      <span class="logo-sub">Авторский проект Юдкевича</span>
-    </div>
-  </div>
-  <div class="status">
-    <div class="status-dot" id="statusDot"></div>
-    <span id="statusText">Проверка...</span>
-  </div>
+<div class="logo" onclick="showPage('home')">
+<div class="logo-icon">YD</div>
+<div class="logo-text">
+<span class="logo-title">Моральная Дилемма</span>
+<span class="logo-sub">Авторский проект Юдкевича</span>
+</div>
+</div>
+<div class="status">
+<div class="status-dot" id="statusDot"></div>
+<span id="statusText">Проверка...</span>
+</div>
 </header>
 
 <main class="main">
 
-  <!-- HOME -->
-  <div class="page active" id="page-home">
-    <div class="home">
+<div class="page active" id="page-home">
+<div class="home">
 
-      <div class="sidebar">
-        <div class="sidebar-label">Разделы</div>
-        <div class="sidebar-item active" onclick="switchTab('shorts',this)"><span class="sidebar-icon">▶</span> Шорцы</div>
-        <div class="sidebar-item" onclick="switchTab('presentations',this)"><span class="sidebar-icon">📊</span> Презентации</div>
-        <div class="sidebar-item" onclick="switchTab('podcasts',this)"><span class="sidebar-icon">🎙</span> Подкасты</div>
-        <div class="sidebar-item" onclick="switchTab('pdf',this)"><span class="sidebar-icon">📄</span> PDF</div>
-        <div class="sidebar-divider"></div>
-        <div class="sidebar-item" onclick="switchTab('analyzer',this)"><span class="sidebar-icon">🔬</span> Анализатор</div>
-      </div>
+<div class="sidebar">
+<div class="sidebar-label">Разделы</div>
+<div class="sidebar-item active" onclick="switchTab('shorts',this)"><span class="sidebar-icon">▶</span> Шорцы</div>
+<div class="sidebar-item" onclick="switchTab('presentations',this)"><span class="sidebar-icon">📊</span> Презентации</div>
+<div class="sidebar-item" onclick="switchTab('podcasts',this)"><span class="sidebar-icon">🎙</span> Подкасты</div>
+<div class="sidebar-item" onclick="switchTab('pdf',this)"><span class="sidebar-icon">📄</span> PDF</div>
+<div class="sidebar-divider"></div>
+<div class="sidebar-item" onclick="switchTab('analyzer',this)"><span class="sidebar-icon">🔬</span> Анализатор</div>
+</div>
 
-      <div class="content">
+<div class="content">
 
-        <!-- ШОРЦЫ -->
-        <div class="tab-content active" id="tab-shorts">
-          <div class="section-header">
-            <div class="section-label-line">Создание шортов</div>
-            <div class="section-line"></div>
-          </div>
-          <div class="cards-grid">
+<div class="tab-content active" id="tab-shorts">
+<div class="section-header">
+<div class="section-label-line">Создание шортов</div>
+<div class="section-line"></div>
+</div>
+<div class="cards-grid">
 
-            <div class="card theme-yellow" onclick="openPipeline()">
-              <div class="card-top-line"></div>
-              <div class="card-icon-wrap">⚡</div>
-              <div class="card-title">Когнитивный разрыв</div>
-              <div class="card-desc">Создаёт сценарии YouTube Shorts из библейских текстов через 5-этапный конвейер.</div>
-              <div class="card-tags">
-                <span class="tag">Архитектор</span>
-                <span class="tag">Усилитель</span>
-                <span class="tag">Сценарист</span>
-                <span class="tag">Названия</span>
-                <span class="tag">Финализатор</span>
-              </div>
-            </div>
+<div class="card theme-yellow" onclick="openPipeline()">
+<div class="card-top-line"></div>
+<div class="card-icon-wrap">⚡</div>
+<div class="card-title">Когнитивный разрыв</div>
+<div class="card-desc">Создаёт сценарии YouTube Shorts из библейских текстов через 4-этапный конвейер.</div>
+<div class="card-tags">
+<span class="tag">Архитектор</span>
+<span class="tag">Усилитель</span>
+<span class="tag">Сценарист</span>
+<span class="tag">Названия</span>
+</div>
+</div>
 
-            <div class="card theme-red disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">👊</div>
-              <div class="card-title">Удар в лоб</div>
-              <div class="card-desc">Максимальный когнитивный разрыв с первой секунды.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+<div class="card theme-red disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">👊</div><div class="card-title">Удар в лоб</div><div class="card-desc">Максимальный когнитивный разрыв с первой секунды.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-orange disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">💣</div><div class="card-title">Тихая бомба</div><div class="card-desc">Зритель соглашается — и не замечает как попал в ловушку.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-blue disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">🔍</div><div class="card-title">Скрытый механизм</div><div class="card-desc">То что было всегда — но никто не называл вслух.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-purple disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">🔄</div><div class="card-title">Перевёрнутая картина</div><div class="card-desc">Всё что зритель знал — оказывается не тем.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-teal disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">❓</div><div class="card-title">Невыносимый вопрос</div><div class="card-desc">Ответ кажется неизбежным — и не приходит.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-pink disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">⚖️</div><div class="card-title">Два факта — один тупик</div><div class="card-desc">Логическая невозможность которую нельзя игнорировать.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-blue disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">🔧</div><div class="card-title">Новая сборка</div><div class="card-desc">Роли переставлены — зритель видит другую систему.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-red disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">🎯</div><div class="card-title">Личный приговор</div><div class="card-desc">Зритель понимает что уже сделал выбор.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-teal disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">🧊</div><div class="card-title">Холодный протокол</div><div class="card-desc">Только факты — без эмоций — и это невыносимо.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-orange disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">💥</div><div class="card-title">Полный разрыв</div><div class="card-desc">Все уровни когнитивного разрыва в одном тексте.</div><div><span class="btn-dev">В разработке</span></div></div>
 
-            <div class="card theme-orange disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">💣</div>
-              <div class="card-title">Тихая бомба</div>
-              <div class="card-desc">Зритель соглашается — и не замечает как попал в ловушку.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+</div>
+</div>
 
-            <div class="card theme-blue disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">🔍</div>
-              <div class="card-title">Скрытый механизм</div>
-              <div class="card-desc">То что было всегда — но никто не называл вслух.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+<div class="tab-content" id="tab-presentations">
+<div class="section-header"><div class="section-label-line">Презентации</div><div class="section-line"></div></div>
+<div class="cards-grid">
+<div class="card theme-blue disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">📊</div><div class="card-title">Мини-презентация</div><div class="card-desc">Создаёт структуру короткой презентации из библейского текста.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-purple disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">🎨</div><div class="card-title">Визуальный нарратив</div><div class="card-desc">Разворачивает библейскую историю в слайды с визуальным акцентом.</div><div><span class="btn-dev">В разработке</span></div></div>
+</div>
+</div>
 
-            <div class="card theme-purple disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">🔄</div>
-              <div class="card-title">Перевёрнутая картина</div>
-              <div class="card-desc">Всё что зритель знал — оказывается не тем.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+<div class="tab-content" id="tab-podcasts">
+<div class="section-header"><div class="section-label-line">Подкасты</div><div class="section-line"></div></div>
+<div class="cards-grid">
+<div class="card theme-teal disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">🎙</div><div class="card-title">Моральный диалог</div><div class="card-desc">Создаёт сценарий подкаста в формате диалога вокруг библейской дилеммы.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-orange disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">🎧</div><div class="card-title">Разбор текста</div><div class="card-desc">Структурирует глубокий разбор библейского отрывка для подкаста.</div><div><span class="btn-dev">В разработке</span></div></div>
+</div>
+</div>
 
-            <div class="card theme-teal disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">❓</div>
-              <div class="card-title">Невыносимый вопрос</div>
-              <div class="card-desc">Ответ кажется неизбежным — и не приходит.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+<div class="tab-content" id="tab-pdf">
+<div class="section-header"><div class="section-label-line">PDF</div><div class="section-line"></div></div>
+<div class="cards-grid">
+<div class="card theme-red disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">📄</div><div class="card-title">Разбор главы</div><div class="card-desc">Создаёт структурированный PDF-разбор библейской главы.</div><div><span class="btn-dev">В разработке</span></div></div>
+<div class="card theme-pink disabled"><div class="card-top-line"></div><div class="card-badge">Скоро</div><div class="card-icon-wrap">📋</div><div class="card-title">Учебный материал</div><div class="card-desc">Генерирует учебный PDF с вопросами и ответами по библейской теме.</div><div><span class="btn-dev">В разработке</span></div></div>
+</div>
+</div>
 
-            <div class="card theme-pink disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">⚖️</div>
-              <div class="card-title">Два факта — один тупик</div>
-              <div class="card-desc">Логическая невозможность которую нельзя игнорировать.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+<div class="tab-content" id="tab-analyzer">
+<div class="section-header"><div class="section-label-line">Анализатор</div><div class="section-line"></div></div>
+<div class="analyzer-block">
+<div class="analyzer-title">Анализатор контента</div>
+<div class="analyzer-badge">В разработке</div>
+<div class="analyzer-desc">Берёт большой библейский текст или проповедь и автоматически создаёт контент сразу в четырёх форматах.</div>
+<div class="analyzer-outputs">
+<div class="analyzer-output"><span class="analyzer-output-icon">▶</span>Шорцы</div>
+<div class="analyzer-output"><span class="analyzer-output-icon">📊</span>Презентация</div>
+<div class="analyzer-output"><span class="analyzer-output-icon">🎙</span>Подкаст</div>
+<div class="analyzer-output"><span class="analyzer-output-icon">📄</span>PDF</div>
+</div>
+</div>
+</div>
 
-            <div class="card theme-blue disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">🔧</div>
-              <div class="card-title">Новая сборка</div>
-              <div class="card-desc">Роли переставлены — зритель видит другую систему.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+</div>
+</div>
+</div>
 
-            <div class="card theme-red disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">🎯</div>
-              <div class="card-title">Личный приговор</div>
-              <div class="card-desc">Зритель понимает что уже сделал выбор.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+<div class="page" id="page-pipeline">
+<div class="pipeline-page">
+<div class="page-back" onclick="showPage('home')">← Назад</div>
+<div class="pipeline-title">Когнитивный разрыв</div>
+<div class="pipeline-sub">Архитектор когнитивного разрыва — 5 предложений из твоего текста</div>
 
-            <div class="card theme-teal disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">🧊</div>
-              <div class="card-title">Холодный протокол</div>
-              <div class="card-desc">Только факты — без эмоций — и это невыносимо.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+<div class="input-block">
+<div class="input-label">Твой текст или идея</div>
+<textarea id="userInput" placeholder="Введи библейский текст или идею для шорта..."></textarea>
+<button class="btn-run" id="btnRun" onclick="runPipeline()">▶ Запустить</button>
+</div>
 
-            <div class="card theme-orange disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">💥</div>
-              <div class="card-title">Полный разрыв</div>
-              <div class="card-desc">Все уровни когнитивного разрыва в одном тексте.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
+<div class="error-msg" id="errorMsg"></div>
+<div class="loading" id="loading"><div class="spinner"></div><span id="loadingText">Обработка...</span></div>
 
-          </div>
-        </div>
+<div class="pause-block" id="pauseVariants">
+<div class="pause-label">⏸ Выбери вариант</div>
+<div class="pause-variants" id="variantsList"></div>
+<div class="pause-custom">
+<div class="input-label">Или введи свой вариант</div>
+<textarea id="customVariant" placeholder="Свой текст..."></textarea>
+</div>
+<button class="btn-continue" id="btnSelectVariant" onclick="continueToStage3()">Продолжить →</button>
+<button class="btn-reset" style="margin-top:8px" onclick="resetPipeline()">↺ Новый текст</button>
+</div>
 
-        <!-- ПРЕЗЕНТАЦИИ -->
-        <div class="tab-content" id="tab-presentations">
-          <div class="section-header">
-            <div class="section-label-line">Презентации</div>
-            <div class="section-line"></div>
-          </div>
-          <div class="cards-grid">
-            <div class="card theme-blue disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">📊</div>
-              <div class="card-title">Мини-презентация</div>
-              <div class="card-desc">Создаёт структуру короткой презентации из библейского текста.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
-            <div class="card theme-purple disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">🎨</div>
-              <div class="card-title">Визуальный нарратив</div>
-              <div class="card-desc">Разворачивает библейскую историю в слайды с визуальным акцентом.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
-          </div>
-        </div>
+<div class="result-block" id="result3">
+<div class="result-label"><span class="step-num">03</span> Сценарист</div>
+<div class="result-text" id="result3Text"></div>
+<div style="display:flex;gap:12px;margin-top:16px">
+<button class="btn-continue" id="btnCopy3" onclick="copyResult3()">⎘ Скопировать</button>
+<button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
+</div>
+</div>
 
-        <!-- ПОДКАСТЫ -->
-        <div class="tab-content" id="tab-podcasts">
-          <div class="section-header">
-            <div class="section-label-line">Подкасты</div>
-            <div class="section-line"></div>
-          </div>
-          <div class="cards-grid">
-            <div class="card theme-teal disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">🎙</div>
-              <div class="card-title">Моральный диалог</div>
-              <div class="card-desc">Создаёт сценарий подкаста в формате диалога вокруг библейской дилеммы.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
-            <div class="card theme-orange disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">🎧</div>
-              <div class="card-title">Разбор текста</div>
-              <div class="card-desc">Структурирует глубокий разбор библейского отрывка для подкаста.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- PDF -->
-        <div class="tab-content" id="tab-pdf">
-          <div class="section-header">
-            <div class="section-label-line">PDF</div>
-            <div class="section-line"></div>
-          </div>
-          <div class="cards-grid">
-            <div class="card theme-red disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">📄</div>
-              <div class="card-title">Разбор главы</div>
-              <div class="card-desc">Создаёт структурированный PDF-разбор библейской главы.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
-            <div class="card theme-pink disabled">
-              <div class="card-top-line"></div>
-              <div class="card-badge">Скоро</div>
-              <div class="card-icon-wrap">📋</div>
-              <div class="card-title">Учебный материал</div>
-              <div class="card-desc">Генерирует учебный PDF с вопросами и ответами по библейской теме.</div>
-              <div><span class="btn-dev">В разработке</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- АНАЛИЗАТОР -->
-        <div class="tab-content" id="tab-analyzer">
-          <div class="section-header">
-            <div class="section-label-line">Анализатор</div>
-            <div class="section-line"></div>
-          </div>
-          <div class="analyzer-block">
-            <div class="analyzer-title">Анализатор контента</div>
-            <div class="analyzer-badge">В разработке</div>
-            <div class="analyzer-desc">Берёт большой библейский текст или проповедь и автоматически создаёт контент сразу в четырёх форматах.</div>
-            <div class="analyzer-outputs">
-              <div class="analyzer-output"><span class="analyzer-output-icon">▶</span>Шорцы</div>
-              <div class="analyzer-output"><span class="analyzer-output-icon">📊</span>Презентация</div>
-              <div class="analyzer-output"><span class="analyzer-output-icon">🎙</span>Подкаст</div>
-              <div class="analyzer-output"><span class="analyzer-output-icon">📄</span>PDF</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- PIPELINE -->
-  <div class="page" id="page-pipeline">
-    <div class="pipeline-page">
-      <div class="page-back" onclick="showPage('home')">← Назад</div>
-      <div class="pipeline-title">Когнитивный разрыв</div>
-      <div class="pipeline-sub">Архитектор когнитивного разрыва — 5 предложений из твоего текста</div>
-
-      <div class="input-block">
-        <div class="input-label">Твой текст или идея</div>
-        <textarea id="userInput" placeholder="Введи библейский текст или идею для шорта..."></textarea>
-        <button class="btn-run" id="btnRun" onclick="runPipeline()">▶ Запустить</button>
-      </div>
-
-      <div class="error-msg" id="errorMsg"></div>
-      <div class="loading" id="loading"><div class="spinner"></div><span id="loadingText">Обработка...</span></div>
-
-      <div class="pause-block" id="pauseVariants">
-        <div class="pause-label">⏸ Выбери вариант</div>
-        <div class="pause-variants" id="variantsList"></div>
-        <div class="pause-custom">
-          <div class="input-label">Или введи свой вариант</div>
-          <textarea id="customVariant" placeholder="Свой текст..."></textarea>
-        </div>
-        <button class="btn-continue" id="btnSelectVariant" onclick="continueToStage3()">Продолжить →</button>
-        <button class="btn-reset" style="margin-top:8px" onclick="resetPipeline()">↺ Новый текст</button>
-      </div>
-
-      <div class="result-block" id="result3">
-        <div class="result-label"><span class="step-num">03</span> Сценарист</div>
-        <div class="result-text" id="result3Text"></div>
-        <div style="display:flex;gap:12px;margin-top:16px">
-          <button class="btn-continue" id="btnCopy3" onclick="copyResult3()">⎘ Скопировать</button>
-          <button class="btn-reset" onclick="resetPipeline()">↺ Новый текст</button>
-        </div>
-      </div>
-
-      <div class="pause-block" id="pauseTitles">
-        <div class="pause-label">⏸ Выбери название</div>
-        <div class="titles-list" id="titlesList"></div>
-        <div class="pause-custom">
-          <div class="input-label">Или введи своё название</div>
-          <textarea id="customTitle" placeholder="Своё название..." style="min-height:60px"></textarea>
-        </div>
-        <button class="btn-continue" id="btnSelectTitle" onclick="copySelectedTitle()">⎘ Скопировать название</button>
-        <button class="btn-reset" style="margin-top:8px" onclick="resetPipeline()">↺ Новый текст</button>
-      </div>
-    </div>
-  </div>
+<div class="pause-block" id="pauseTitles">
+<div class="pause-label">⏸ Выбери название</div>
+<div class="titles-list" id="titlesList"></div>
+<div class="pause-custom">
+<div class="input-label">Или введи своё название</div>
+<textarea id="customTitle" placeholder="Своё название..." style="min-height:60px"></textarea>
+</div>
+<button class="btn-continue" id="btnSelectTitle" onclick="copySelectedTitle()">⎘ Скопировать название</button>
+<button class="btn-reset" style="margin-top:8px" onclick="resetPipeline()">↺ Новый текст</button>
+</div>
+</div>
+</div>
 
 </main>
 
@@ -640,17 +382,26 @@ const PROMPTS={
 
 Каждое предложение должно быть коротким — 8–14 слов.
 
+Исключение: предложение 4 (ТУПИК) — лимит слов не применяется.
+
 Избегай лишних слов, объяснений и повторов.
 
 Режим: Структурный, но допускается естественный язык.
 
-Запрещено: Добавлять новые факты отсутствующие в тексте.
+Разрешено:
+— менять порядок подачи фактов
+— усиливать формулировку только за счёт: порядка слов, длины фраз
+— расставлять акценты
 
-Запрещено: Воспроизводить структуру и последовательность исходника.
+Запрещено:
+— менять смысл фактов
+— добавлять причины или последствия
+— вводить новые элементы
+— добавлять новые слова с оценкой или эмоцией, если их не было во входе
+— разбивать предложения
+— использовать связки «потому что», «поэтому», «так как»
 
-Разрешено: Брать отдельные факты и детали из текста — но переосмыслять их через конфликт.
-
-Запрещено использовать связки «потому что», «поэтому», «так как».
+Субъект, действие и объект каждого факта должны оставаться теми же.
 
 Алгоритм синтеза:
 Каждое предложение — следующий шаг конфликта.
@@ -674,10 +425,11 @@ const PROMPTS={
 Запрещено: абстрактные формулировки.
 
 Предложение 4 (ТУПИК):
-Сформулируй два факта из текста которые не могут быть правдой одновременно.
+Сформулируй два факта из текста которые противоречат друг другу.
 Оба факта должны быть конкретными — действие, объект, субъект.
 Запрещено: абстракции, обобщения, игра слов.
-Формат: "[Факт 1]. [Факт 2]." — два утверждения без союзов.
+Формат: "[Факт 1] — [Факт 2]."
+Это считается одним предложением.
 
 Предложение 5 (ФИНАЛ):
 Короткий удар, фиксирующий конфликт.
@@ -686,7 +438,7 @@ const PROMPTS={
 Запрещено: заканчивать вопросом.
 
 Общий принцип:
-Сохраняй противоречие и связность.`,max_tokens:400,temperature:0.3,top_p:0.9},
+Сохраняй противоречие и связность.`,max_tokens:300,temperature:0.3,top_p:0.9},
 
   stage2:{system:`Роль: Усилитель когнитивного разрыва.
 
@@ -698,32 +450,41 @@ const PROMPTS={
 
 Режим: Управляемая креативность только в синтаксисе — короткие фразы, паузы, глаголы действия.
 
-Запрещено: Добавлять новые факты, смыслы, интерпретации. Рекламные клише: "уникальный", "невероятный", "узнай как". Новые эмоции и оценки.
+Запрещено:
+— добавлять новые факты, смыслы, интерпретации
+— заменять факты интерпретациями, обобщениями или метафорами
+— использовать рекламные клише: "уникальный", "невероятный", "узнай как"
+— добавлять новые эмоциональные слова, если их нет во входе
+— разбивать или объединять предложения
+— использовать канцеляризмы
 
-Запрещено заменять факты интерпретациями, обобщениями или метафорами.
 Каждое предложение должно сохранять исходный смысл без переосмысления.
 Например: «долг», «страховка», «давление» — запрещены, если их нет во входе.
 
 Правила живого языка:
-Говори как человек который только что это понял. Короткие предложения. Паузы. Незаконченные мысли... Никаких "таким образом", "следует отметить", "примечательно". Канцеляризмы — заменяй на глаголы действия. Запрещено использовать эмоциональные слова. Напряжение создаётся только через синтаксис и столкновение фактов. Логика HOOK → CONFLICT → ACTION → DEAD END → FINAL сохраняется полностью.
+Говори как человек который только что это понял.
+Короткие предложения. Паузы. Незаконченные конструкции допустимы только внутри предложений, без изменения их количества и без нарушения финала.
+Никаких "таким образом", "следует отметить", "примечательно".
+Напряжение создаётся только через синтаксис и столкновение фактов.
 
-Каждый элемент (HOOK, CONFLICT, ACTION, DEAD END, FINAL) должен быть переписан из соответствующего предложения входа, а не создан заново.
+Структура:
+Логика HOOK → CONFLICT → ACTION → DEAD END → FINAL сохраняется полностью.
+Каждый элемент переписывается из соответствующего предложения входа — не создаётся заново.
+Каждое предложение варианта соответствует одному предложению входа (1 к 1).
 Порядок элементов строго сохраняется. Перестановка запрещена.
+Разбиение и объединение предложений запрещено. Изменения допускаются только внутри каждого предложения.
 
 Финал подчиняется правилам Этапа 1: запрещено объяснять, обобщать, морализировать и выходить из сцены.
 
-Каждый вариант обязан содержать ровно 5 предложений.
-Удаление, объединение или добавление предложений запрещено.
+ВАРИАНТ 1 — СЖАТИЕ: очищенный текст до ядра противоречия. Только удар. Лимит: 30–38 слов.
 
-ВАРИАНТ 1 — СЖАТИЕ: очищенный текст до ядра противоречия. Только удар. Лимит: 30–45 слов.
+ВАРИАНТ 2 — ДАВЛЕНИЕ: жёстче за счёт синтаксиса и контраста. Усиленный хук и финальный удар. Без новых фактов. Лимит: 42–50 слов.
 
-ВАРИАНТ 2 — ДАВЛЕНИЕ: жёстче за счёт синтаксиса и контраста. Усиленный хук и финальный удар. Без новых фактов. Лимит: 40–45 слов, отклонение ±5 слов допустимо.
-
-Правило уникальности: СЖАТИЕ и ДАВЛЕНИЕ не могут использовать одинаковый хук, финальный удар и синтаксическую модель. Каждый вариант строит хук и финал независимо.
+Варианты должны отличаться — длиной предложений и ритмом (короткие vs смешанные фразы).
 
 Формат вывода:
 ВАРИАНТ 1 — СЖАТИЕ: [текст]
-ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:600,temperature:0.7,top_p:0.9},
+ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:300,temperature:0.7,top_p:0.85},
 
   stage3:{system:`Роль: Сценарист визуального контента.
 
@@ -733,37 +494,43 @@ const PROMPTS={
 
 Режим: Управляемая креативность только в форме подачи.
 
-Запрещено: Добавлять факты, смыслы и интерпретации отсутствующие во входящем тексте. Объяснять конфликт — только удерживать напряжение. Использовать markdown-форматирование (никаких **, #, ---, *курсив*).
+Запрещено: Добавлять факты, смыслы и интерпретации отсутствующие во входящем тексте. Объяснять конфликт — только удерживать напряжение. Использовать markdown-форматирование (никаких **, #, ---, курсив).
 
 Язык: все блоки — на русском языке.
 
 Блок 1 — Пять сцен:
-Используй структуру входящего текста (HOOK → CONFLICT → ACTION → DEAD END → FINAL) и привяжи к сценам:
-- Сцена 1 — HOOK
-- Сцены 2-3 — CONFLICT и ACTION
-- Сцена 4 — DEAD END
-- Сцена 5 — FINAL
+Используй структуру входящего текста и привяжи к сценам:
+Сцена 1 — HOOK
+Сцена 2 — CONFLICT
+Сцена 3 — ACTION
+Сцена 4 — DEAD END
+Сцена 5 — FINAL
 
 Для каждой сцены — один промт для визуала.
 
 Правила промта:
-- Эпоха соответствует теме текста
-- Стиль: полуреалистичный, кинематографичный
-- Сцена показывает конфликт или действие — не атмосферу
-- Без религиозных символов: крестов, звёзд Давида, полумесяцев
+Эпоха соответствует теме текста.
+Стиль: полуреалистичный, кинематографичный.
+Сцена показывает конфликт или действие — не атмосферу.
+Без явных культовых символов современных религий.
 
 Блок 2 — Описание для YouTube:
-- 2-3 предложения: контекст + интрига
-- Вопрос к зрителю
-- Хештеги: не более 5. Первый #shorts, последний #моральнаядилемма
+2-3 предложения: контекст + интрига.
+Вопрос к зрителю.
+Хештеги: не более 5. Первый #shorts, последний #моральнаядилемма.
 
 Блок 3 — Пост для комментариев:
-- Другой угол — не повторяй фразы из входящего текста
-- Раскрывает тему через переформулировку без новых фактов
-- 200-250 слов
-- Эмодзи для структуры и читаемости
-- Запрещено: моральные выводы, проповедь, объяснение конфликта
-- Удерживает напряжение, оставляет вопрос открытым
+Другой угол — не повторяй фразы из входящего текста.
+Раскрывает тему через переформулировку без новых фактов.
+150-200 слов.
+Используй только эти эмодзи для структуры:
+⚡ — удар / факт (HOOK)
+⚠️ — конфликт / тупик
+🔹 — нейтральный разделитель
+❓ — только в финальной строке
+Не более одного эмодзи на абзац.
+Запрещено: моральные выводы, проповедь, объяснение конфликта.
+Удерживает напряжение, оставляет вопрос открытым.
 
 Формат вывода:
 СЦЕНА 1: [промт]
@@ -772,7 +539,7 @@ const PROMPTS={
 СЦЕНА 4: [промт]
 СЦЕНА 5: [промт]
 ОПИСАНИЕ: [текст]
-ПОСТ: [текст]`,max_tokens:2500,temperature:0.4,top_p:0.9},
+ПОСТ: [текст]`,max_tokens:1600,temperature:0.4,top_p:0.9},
 
   stage4:{system:`Роль: Генератор триггерных названий.
 
@@ -787,12 +554,19 @@ const PROMPTS={
 Запрещено: Выдумывать сущности отсутствующие в тексте. Нейтральный тон, вводные слова, эмодзи, пояснительный текст. Названия не должны противоречить библейским ценностям.
 
 Принципы:
-- Curiosity gap — фундамент каждого названия
-- 14-28 символов
-- Смысловой крючок в первых 3 словах
-- Простые живые слова — никаких канцеляризмов
-- 6 разных психологических приёмов
-- Пунктуация: только «?», «:», «—»
+Curiosity gap — фундамент каждого названия.
+14–35 символов.
+Смысловой крючок в первых 3 словах.
+Простые живые слова — никаких канцеляризмов.
+Пунктуация: только «?», «:», «—».
+
+Каждое название использует один из шести приёмов — все шесть должны быть использованы:
+1. Противоречие — два факта которые не сходятся
+2. Личное обвинение — читатель внутри ситуации
+3. Переворот — то что казалось очевидным оказывается не так
+4. Тупик — выбор невозможен, оба варианта ломают картину
+5. Скрытое — то что было всегда но никто не называл
+6. Цена — что это лично стоит читателю
 
 Формат вывода:
 1. [Название]
@@ -800,7 +574,7 @@ const PROMPTS={
 3. [Название]
 4. [Название]
 5. [Название]
-6. [Название]`,max_tokens:200,temperature:0.85,top_p:0.9}
+6. [Название]`,max_tokens:250,temperature:0.85,top_p:0.9}
 };
 
 async function checkStatus(){
@@ -819,7 +593,7 @@ function hideLoading(){document.getElementById('loading').classList.remove('visi
 function showError(m){const el=document.getElementById('errorMsg');el.textContent=m;el.classList.add('visible');}
 function hideError(){document.getElementById('errorMsg').classList.remove('visible');}
 
-let selectedVariantText = '';
+let selectedVariantText='';
 
 async function runPipeline(){
   const input=document.getElementById('userInput').value.trim();
@@ -831,8 +605,7 @@ async function runPipeline(){
   let stage1Result='';
   try{
     stage1Result=await callClaude(PROMPTS.stage1,input);
-  }
-  catch(e){
+  }catch(e){
     hideLoading();
     showError('Ошибка Этапа 1: '+e.message);
     document.getElementById('btnRun').disabled=false;
@@ -843,9 +616,8 @@ async function runPipeline(){
   try{
     const result2=await callClaude(PROMPTS.stage2,stage1Result);
     hideLoading();
-    showVariants(result2, stage1Result);
-  }
-  catch(e){
+    showVariants(result2,stage1Result);
+  }catch(e){
     hideLoading();
     showError('Ошибка Этапа 2: '+e.message);
     document.getElementById('btnRun').disabled=false;
@@ -853,7 +625,7 @@ async function runPipeline(){
   }
 }
 
-function showVariants(text, stage1text){
+function showVariants(text,stage1text){
   let v1='',v2='';
   const m1=text.match(/ВАРИАНТ\s*1[^:]*:\s*([\s\S]*?)(?=ВАРИАНТ\s*2|$)/i);
   const m2=text.match(/ВАРИАНТ\s*2[^:]*:\s*([\s\S]*?)$/i);
@@ -867,7 +639,7 @@ function showVariants(text, stage1text){
     {label:'Вариант 1 — Сжатие',text:v1},
     {label:'Вариант 2 — Давление',text:v2}
   ];
-  variants.forEach((v,i)=>{
+  variants.forEach((v)=>{
     if(!v.text)return;
     const div=document.createElement('div');
     div.className='variant-card';
@@ -902,16 +674,13 @@ async function continueToStage3(){
     const r3el=document.getElementById('result3');
     r3el.classList.add('visible');
     r3el.scrollIntoView({behavior:'smooth',block:'start'});
-    // Run stage4
     setLoading('Этап 4 — Генератор названий...');
     try{
       const result4=await callClaude(PROMPTS.stage4,text);
       hideLoading();
       showTitles(result4);
-    }
-    catch(e){hideLoading();showError('Ошибка Этапа 4: '+e.message);}
-  }
-  catch(e){
+    }catch(e){hideLoading();showError('Ошибка Этапа 4: '+e.message);}
+  }catch(e){
     hideLoading();
     showError('Ошибка Этапа 3: '+e.message);
     document.getElementById('btnSelectVariant').disabled=false;
@@ -921,7 +690,6 @@ async function continueToStage3(){
 function showTitles(text){
   const c=document.getElementById('titlesList');
   c.innerHTML='';
-  let selectedTitle='';
   text.split('\n').filter(l=>l.trim()).forEach(l=>{
     const m=l.match(/^\d+\.\s+(.+)/);
     if(!m)return;
@@ -933,7 +701,6 @@ function showTitles(text){
       document.querySelectorAll('.title-item').forEach(el=>el.classList.remove('selected'));
       div.classList.add('selected');
       document.getElementById('customTitle').value='';
-      selectedTitle=t;
       window._selectedTitle=t;
     });
     c.appendChild(div);
