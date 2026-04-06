@@ -166,7 +166,7 @@ textarea:focus { border-color:var(--accent2); }
 .result-block.visible { display:block; }
 .result-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
 .result-label .step-num { font-family:'JetBrains Mono',monospace; color:var(--accent); }
-.result-text { font-size:13px; line-height:1.8; color:var(--text); white-space:pre-wrap; font-family:'JetBrains Mono',monospace; background:var(--bg3); padding:16px; border-radius:8px; border:1px solid var(--border); }
+.result-text { font-size:13px; line-height:1.8; color:var(--text); white-space:pre-wrap; font-family:'JetBrains Mono',monospace; background:var(--bg3); padding:16px; border-radius:8px; border:1px solid var(--border);overflow-x: auto; word-break: break-word; }
 
 .pause-block { background:var(--bg2); border:1px solid var(--accent2); border-radius:12px; padding:24px; margin-bottom:16px; display:none; }
 .pause-block.visible { display:block; }
@@ -424,7 +424,7 @@ const PROMPTS={
 Финал должен оставлять читателя в точке невозврата — без ответа.
 Запрещено: заканчивать вопросом.
 Общий принцип:
-Каждое предложение сужает пространство — к финалу выход должен быть закрыт полностью.`,max_tokens:300,temperature:0.3,top_p:0.9},
+Каждое предложение сужает пространство — к финалу выход должен быть закрыт полностью.`,max_tokens:400,temperature:0.3,top_p:0.9},
   stage2:{system:`Роль: Усилитель когнитивного разрыва.
 
 Задача: Пересобрать входящий текст в два варианта с максимальным когнитивным разрывом через живой язык.
@@ -469,7 +469,7 @@ const PROMPTS={
 
 Формат вывода:
 ВАРИАНТ 1 — СЖАТИЕ: [текст]
-ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:300,temperature:0.7,top_p:0.85},
+ВАРИАНТ 2 — ДАВЛЕНИЕ: [текст]`,max_tokens:400,temperature:0.7,top_p:0.85},
 
   stage3:{system:`Роль: Сценарист визуального контента.
 
